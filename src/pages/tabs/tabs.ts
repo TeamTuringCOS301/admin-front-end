@@ -1,18 +1,17 @@
 import { Component } from '@angular/core';
 
-import { AboutPage } from '../about/about';
-import { ContactPage } from '../contact/contact';
-import { HomePage } from '../home/home';
-import { ConservationAdminsPage } from '../conservation-admins/conservation-admins'
+import { StoreMasterPage } from '../store-master/store-master';
+import { ConservationAreaMasterPage } from '../conservation-area-master/conservation-area-master';
+import { ConservationAdminMasterPage } from '../conservation-admin-master/conservation-admin-master'
 
 @Component({
   templateUrl: 'tabs.html'
 })
 export class TabsPage {
 
-  tab1Root = HomePage;
-  tab2Root = ConservationAdminsPage;
-  tab3Root = ContactPage;
+  tab1Root = ConservationAreaMasterPage;
+  tab2Root = ConservationAdminMasterPage;
+  tab3Root = StoreMasterPage;
 
   constructor() {
 

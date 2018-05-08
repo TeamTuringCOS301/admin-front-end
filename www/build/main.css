@@ -25678,6 +25678,11 @@ ion-navbar.toolbar {
   min-height: calc(46px + env(safe-area-inset-bottom));
 }
 
+page-conservation-area-create #map {
+  height: 100%;
+  width: 100%;
+}
+
 page-home #map {
   height: 100%;
   width: 100%;
