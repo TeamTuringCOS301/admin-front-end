@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Drawing tools</title>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+    <style>
+      #map {
+        height: 500px;
+        width: 600px;
+      }
+        html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="map"></div>
+    <script>
+		
+	  var drawingManager;
+      var selectedShape;
+
+      function clearSelection() {
+        if (selectedShape) {
+          selectedShape.setEditable(false);
+          selectedShape = null;
+        }
+      }
+
+      function setSelection(shape) {
+        clearSelection();
+        selectedShape = shape;
+        shape.setEditable(true);
+        selectColor(shape.get('fillColor') || shape.get('strokeColor'));
+      }
+
+      function deleteSelectedShape() {
+        if (selectedShape) {
+		  document.getElementById('results').innerHTML = '';
+          selectedShape.setMap(null);
+          drawingManager.setOptions({
+            drawingControl: true
+          });
+        }
+        else {
+			document.getElementById('results').innerHTML = 'select a drawn shape';
+		}
+      }
+      
+      function confirm() {		//here we send coordinates to database and exit the page
+		if (selectedShape) {
+          var len = selectedShape.getPath().getLength();
+		  var htmlStr = "";
+		  for (var i = 0; i < len; i++) {
+            htmlStr += selectedShape.getPath().getAt(i).toUrlValue(5) + "<br>";
+		  }
+			document.getElementById('results').innerHTML = htmlStr;
+        }
+        else {
+			document.getElementById('results').innerHTML = 'select a drawn shape';
+		}
+	  }
+
+      function initMap() {
+        var map = new google.maps.Map(document.getElementById('map'), {
+          center: {lat: -28.5, lng: 25},
+          zoom: 5.5,
+          disableDefaultUI: true,
+          zoomControl: true,
+          mapTypeId: 'satellite',
+			mapTypeControl: true
+        });
+		
+		var polyOptions = {
+          strokeWeight: 1.5,
+          fillOpacity: 0.2,
+          editable: true
+        };
+
+        drawingManager = new google.maps.drawing.DrawingManager({
+          drawingControl: true,
+          drawingControlOptions: {
+            position: google.maps.ControlPosition.TOP_CENTER,
+            drawingModes: ['polygon']
+			},
+          markerOptions: {
+            draggable: true
+          },
+          polylineOptions: {
+            editable: true
+          },
+          polygonOptions: polyOptions,
+          map: map	  
+        });
+        
+        google.maps.event.addListener(drawingManager, 'overlaycomplete', function(e) {
+            if (e.type != google.maps.drawing.OverlayType.MARKER) {
+            drawingManager.setDrawingMode(null);
+            drawingManager.setOptions({
+              drawingControl: false
+            });
+
+            var newShape = e.overlay;
+            newShape.type = e.type;
+            google.maps.event.addListener(newShape, 'click', function() {
+              setSelection(newShape);
+            });
+            setSelection(newShape);
+          }
+        });
+
+		google.maps.event.addListener(drawingManager, 'drawingmode_changed', clearSelection);
+        google.maps.event.addListener(map, 'click', clearSelection);
+        google.maps.event.addDomListener(document.getElementById('delete-button'), 'click', deleteSelectedShape);
+		google.maps.event.addDomListener(document.getElementById('confirm-selection'), 'click', confirm);
+
+        drawingManager.setMap(map);
+      }
+    </script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC8NXWyuhIodPcgW3tPvq_WA2pqrZWc4Jw&libraries=drawing&callback=initMap"
+         async defer></script>
+         
+        <button id="delete-button">Delete Selection</button>
+        <button id="confirm-selection">Confirm Selection</button>
+        
+        <p></p>
+        
+        <div id="results"></div>
+        
+  </body>
+</html>
+
+
+
+
+
+
+
