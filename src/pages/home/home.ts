@@ -109,7 +109,7 @@ export class HomePage {
 
 
 
-  getBorder(input: string){
+  getBorder(){
 
 
     this.clearMarkers();
