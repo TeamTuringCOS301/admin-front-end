@@ -19,7 +19,7 @@
   <body>
     <div id="map"></div>
     <script>
-		
+
 	  var drawingManager;
       var selectedShape;
 
@@ -49,13 +49,13 @@
 			document.getElementById('results').innerHTML = 'select a drawn shape';
 		}
       }
-      
+
       function confirm() {		//here we send coordinates to database and exit the page
 		if (selectedShape) {
           var len = selectedShape.getPath().getLength();
 		  var htmlStr = "";
 		  for (var i = 0; i < len; i++) {
-            htmlStr += selectedShape.getPath().getAt(i).toUrlValue(5) + "<br>";
+            htmlStr += selectedShape.getPath().getAt(i) + "<br>";
 		  }
 			document.getElementById('results').innerHTML = htmlStr;
         }
@@ -73,7 +73,7 @@
           mapTypeId: 'satellite',
 			mapTypeControl: true
         });
-		
+
 		var polyOptions = {
           strokeWeight: 1.5,
           fillOpacity: 0.2,
@@ -93,9 +93,9 @@
             editable: true
           },
           polygonOptions: polyOptions,
-          map: map	  
+          map: map
         });
-        
+
         google.maps.event.addListener(drawingManager, 'overlaycomplete', function(e) {
             if (e.type != google.maps.drawing.OverlayType.MARKER) {
             drawingManager.setDrawingMode(null);
@@ -122,20 +122,13 @@
     </script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC8NXWyuhIodPcgW3tPvq_WA2pqrZWc4Jw&libraries=drawing&callback=initMap"
          async defer></script>
-         
+
         <button id="delete-button">Delete Selection</button>
         <button id="confirm-selection">Confirm Selection</button>
-        
+
         <p></p>
-        
+
         <div id="results"></div>
-        
+
   </body>
 </html>
-
-
-
-
-
-
-

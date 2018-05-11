@@ -10,9 +10,18 @@
     <ion-title>Create Conservation Area</ion-title>
   </ion-navbar>
   <ion-toolbar color="primary">
-    <ion-searchbar #pacinput id="pacinput" [(ngModel)]="autocomplete.input" (ionInput)="updateSearchResults()" placeholder="Search for a place"></ion-searchbar>
+    <ion-grid>
+      <ion-row>
+        <ion-col col-10>
+          <ion-searchbar #pacinput id="pacinput" [(ngModel)]="autocomplete.input" (ionInput)="updateSearchResults()" placeholder="Search for a place"></ion-searchbar>
+        </ion-col>
+        <ion-col col-2>
+          <button class="getborder-btn" ion-button round outline (click)="getBorder()" color="light" [hidden]="undef == true"> Get Border </button>
+          <button class="clear-btn" ion-button round outline (click)="deleteSelectedShape()" color="light" [hidden]="undef == false"> Clear </button>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
   </ion-toolbar>
-
 </ion-header>
 
 
@@ -21,12 +30,47 @@
     <ion-item *ngFor="let item of autocompleteItems" tappable (click)="selectSearchResult(item, $event)">
       {{ item.description }}
     </ion-item>
+
   </ion-list>
 
   <div #map id="map"></div>
+
 </ion-content>
 
 <ion-footer>
-  <button class="geolocation-btn" ion-button full (click)="tryGeolocation()"> Try Geolocation </button>
-  <button class="getborder-btn" ion-button full (click)="getBorder()"> Get Border </button>
+  <form (submit)="addConservationArea(conservationArea.value)" [formGroup]="conservationArea">
+    <ion-grid>
+      <ion-row>
+        <ion-col col-6>
+          <ion-item>
+            <ion-label floating>Province/State</ion-label>
+            <ion-input formControlName="province" type="text"></ion-input>
+          </ion-item>
+        </ion-col>
+        <ion-col col-6>
+          <ion-item>
+            <ion-label floating>City</ion-label>
+            <ion-input formControlName="city" type="text"></ion-input>
+          </ion-item>
+        </ion-col>
+
+      </ion-row>
+      <ion-row>
+        <ion-col col-3></ion-col>
+        <ion-col col-6>
+          <ion-item>
+            <ion-label>Conservation Admin</ion-label>
+            <ion-select formControlName="admin" [(ngModel)]="admin">
+              <ion-option value="admin">Admin</ion-option>
+            </ion-select>
+          </ion-item>
+        </ion-col>
+        <ion-col col-3></ion-col>
+      </ion-row>
+    </ion-grid>
+
+
+    <button ion-button round outline type="submit">Add</button>
+  </form>
+  <!--<button class="geolocation-btn" ion-button round outline (click)="tryGeolocation()"> Try Geolocation </button>-->
 </ion-footer>
