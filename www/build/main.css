@@ -5865,7 +5865,7 @@ button[disabled],
 }
 
 .button-round-ios {
-  border-radius: 64px;
+  border-radius: 4px;
   padding: 0 2.6rem;
 }
 
@@ -6154,7 +6154,7 @@ button[disabled],
 }
 
 .button-round-md {
-  border-radius: 64px;
+  border-radius: 4px;
   padding: 0 2.6rem;
 }
 
@@ -6525,7 +6525,7 @@ button[disabled],
 }
 
 .button-round-wp {
-  border-radius: 64px;
+  border-radius: 4px;
   padding: 0 2.6rem;
 }
 
@@ -25678,12 +25678,18 @@ ion-navbar.toolbar {
   min-height: calc(46px + env(safe-area-inset-bottom));
 }
 
-page-conservation-area-create #map {
-  height: 100%;
-  width: 100%;
+@media screen and (min-width: 900px) {
+  .modal-wrapper {
+    height: 90%;
+    margin: 30px;
+    position: absolute;
+    top: 0;
+    left: 10%;
+    width: 80%;
+  }
 }
 
-page-home #map {
+page-conservation-area-create #map {
   height: 100%;
   width: 100%;
 }

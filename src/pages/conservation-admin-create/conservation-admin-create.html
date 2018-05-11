@@ -14,5 +14,21 @@
 
 
 <ion-content padding>
+  <form (submit)='addConservationAdmin(conservationAdmin.value)' [formGroup]="conservationAdmin">
+    <ion-list>
 
+      <ion-item>
+        <ion-label floating>Username</ion-label>
+        <ion-input type="text"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label floating>Email</ion-label>
+        <ion-input type="email"></ion-input>
+      </ion-item>
+
+      <button ion-button type="submit" outline round >Add</button>
+
+    </ion-list>
+  </form>
 </ion-content>

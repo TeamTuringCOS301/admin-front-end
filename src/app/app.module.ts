@@ -4,7 +4,6 @@ import { HttpModule } from '@angular/http';
 import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
 import { MyApp } from './app.component';
 
-import { HomePage } from '../pages/home/home';
 import { TabsPage } from '../pages/tabs/tabs';
 import { LoginPage } from '../pages/login/login';
 import { ConservationAreaMasterPage } from '../pages/conservation-area-master/conservation-area-master';
@@ -19,7 +18,6 @@ import { Geolocation } from '@ionic-native/geolocation';
 @NgModule({
   declarations: [
     MyApp,
-    HomePage,
     TabsPage,
     LoginPage,
     ConservationAreaMasterPage,
@@ -34,7 +32,6 @@ import { Geolocation } from '@ionic-native/geolocation';
   bootstrap: [IonicApp],
   entryComponents: [
     MyApp,
-    HomePage,
     TabsPage,
     LoginPage,
     ConservationAreaMasterPage,
