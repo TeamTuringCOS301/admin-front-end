@@ -7,6 +7,7 @@ webpackJsonp([4],{
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ConservationAreaMasterPage; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(29);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_http__ = __webpack_require__(50);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -18,6 +19,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 
 
+
 /**
  * Generated class for the ConservationAreaMasterPage page.
  *
@@ -25,9 +27,25 @@ var __metadata = (this && this.__metadata) || function (k, v) {
  * Ionic pages and navigation.
  */
 var ConservationAreaMasterPage = /** @class */ (function () {
-    function ConservationAreaMasterPage(modCtrl, navParams) {
+    function ConservationAreaMasterPage(modCtrl, navParams, http) {
+        var _this = this;
         this.modCtrl = modCtrl;
         this.navParams = navParams;
+        this.http = http;
+        this.areas = [];
+        this.area = {};
+        var jsonArr = {};
+        jsonArr.location = "";
+        var param = JSON.stringify(jsonArr);
+        var headers = new __WEBPACK_IMPORTED_MODULE_2__angular_http__["a" /* Headers */]();
+        headers.append('Content-Type', 'application/json');
+        var options = new __WEBPACK_IMPORTED_MODULE_2__angular_http__["d" /* RequestOptions */]({ headers: headers });
+        var addr = "http://192.168.43.72:8080/area/list";
+        this.http.get(addr).subscribe(function (data) {
+            var jsonResp = JSON.parse(data.text());
+            //alert(data.text());
+            _this.areas = jsonResp.areas;
+        });
     }
     ConservationAreaMasterPage.prototype.ionViewDidLoad = function () {
         console.log('ionViewDidLoad ConservationAreaMasterPage');
@@ -38,11 +56,12 @@ var ConservationAreaMasterPage = /** @class */ (function () {
     };
     ConservationAreaMasterPage = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["m" /* Component */])({
-            selector: 'page-conservation-area-master',template:/*ion-inline-start:"/Users/tristan/devops/admin-front-end/src/pages/conservation-area-master/conservation-area-master.html"*/'<!--\n  Generated template for the ConservationAreaMasterPage page.\n\n  See http://ionicframework.com/docs/components/#navigation for more info on\n  Ionic pages and navigation.\n-->\n<ion-header>\n\n  <ion-navbar>\n    <ion-title>Conservation Areas</ion-title>\n    <ion-buttons end>\n      <button ion-button icon-only (click)=\'openModal()\'>\n        <ion-icon name="add"></ion-icon>\n      </button>\n    </ion-buttons>\n  </ion-navbar>\n\n</ion-header>\n\n\n<ion-content padding>\n\n</ion-content>\n'/*ion-inline-end:"/Users/tristan/devops/admin-front-end/src/pages/conservation-area-master/conservation-area-master.html"*/,
+            selector: 'page-conservation-area-master',template:/*ion-inline-start:"/Users/tristan/devops/admin-front-end/src/pages/conservation-area-master/conservation-area-master.html"*/'<!--\n  Generated template for the ConservationAreaMasterPage page.\n\n  See http://ionicframework.com/docs/components/#navigation for more info on\n  Ionic pages and navigation.\n-->\n<ion-header>\n\n  <ion-navbar>\n    <ion-title>Conservation Areas</ion-title>\n    <ion-buttons end>\n      <button ion-button icon-only (click)=\'openModal()\'>\n        <ion-icon name="add"></ion-icon>\n      </button>\n    </ion-buttons>\n  </ion-navbar>\n\n</ion-header>\n\n\n<ion-content padding>\n  <ion-list>\n    <ion-grid>\n      <ion-row>\n        <ion-col col-1></ion-col>\n        <ion-col col-10>\n          <ion-card *ngFor="let area of areas" color="primary">\n            <ion-card-header>\n              {{area.name}}\n            </ion-card-header>\n            <ion-card-content>\n              <p>Province: {{area.province}}, City: {{area.city}}</p>\n            </ion-card-content>\n          </ion-card>\n        </ion-col>\n        <ion-col col-1></ion-col>\n      </ion-row>\n    </ion-grid>\n  </ion-list>\n</ion-content>\n'/*ion-inline-end:"/Users/tristan/devops/admin-front-end/src/pages/conservation-area-master/conservation-area-master.html"*/,
         }),
-        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["f" /* ModalController */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["h" /* NavParams */]])
+        __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["f" /* ModalController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["f" /* ModalController */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["h" /* NavParams */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["h" /* NavParams */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_2__angular_http__["b" /* Http */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__angular_http__["b" /* Http */]) === "function" && _c || Object])
     ], ConservationAreaMasterPage);
     return ConservationAreaMasterPage;
+    var _a, _b, _c;
 }());
 
 //# sourceMappingURL=conservation-area-master.js.map
@@ -155,8 +174,8 @@ module.exports = webpackAsyncContext;
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return LoginPage; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(29);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_http__ = __webpack_require__(100);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__angular_forms__ = __webpack_require__(15);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_http__ = __webpack_require__(50);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__angular_forms__ = __webpack_require__(13);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__tabs_tabs__ = __webpack_require__(197);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -173,14 +192,15 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 var LoginPage = /** @class */ (function () {
-    function LoginPage(http, navCtrl) {
+    function LoginPage(http, navCtrl, toastCtrl) {
         this.http = http;
         this.navCtrl = navCtrl;
+        this.toastCtrl = toastCtrl;
         this.adminUser = new __WEBPACK_IMPORTED_MODULE_3__angular_forms__["b" /* FormGroup */]({ user: new __WEBPACK_IMPORTED_MODULE_3__angular_forms__["a" /* FormControl */](), pass: new __WEBPACK_IMPORTED_MODULE_3__angular_forms__["a" /* FormControl */]() });
     }
     LoginPage.prototype.loginAdmin = function (value) {
         var _this = this;
-        var addr = "http://192.168.43.19:8080/admin/login";
+        var addr = "http://192.168.43.72:8080/admin/login";
         var jsonArr = {};
         jsonArr.username = value.user;
         jsonArr.password = value.pass;
@@ -189,19 +209,32 @@ var LoginPage = /** @class */ (function () {
         headers.append('Content-Type', 'application/json');
         var options = new __WEBPACK_IMPORTED_MODULE_2__angular_http__["d" /* RequestOptions */]({ headers: headers });
         this.http.post(addr, param, options).subscribe(function (data) {
-            _this.navCtrl.push(__WEBPACK_IMPORTED_MODULE_4__tabs_tabs__["a" /* TabsPage */]);
+            var jsonResp = JSON.parse(data.text());
+            if (jsonResp.success) {
+                _this.presentToast("Logged in!");
+                _this.navCtrl.push(__WEBPACK_IMPORTED_MODULE_4__tabs_tabs__["a" /* TabsPage */]);
+            }
         }, function (error) {
             alert("Error: " + error);
         });
+    };
+    LoginPage.prototype.presentToast = function (text) {
+        var toast = this.toastCtrl.create({
+            message: text,
+            duration: 1500,
+            position: 'bottom',
+            dismissOnPageChange: false
+        });
+        toast.present();
     };
     LoginPage = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["m" /* Component */])({
             selector: 'page-login',template:/*ion-inline-start:"/Users/tristan/devops/admin-front-end/src/pages/login/login.html"*/'<ion-header>\n  <ion-navbar>\n    <ion-title>Login</ion-title>\n  </ion-navbar>\n</ion-header>\n\n<ion-content padding>\n  <ion-grid>\n    <ion-row>\n      <ion-col col-3></ion-col>\n      <ion-col col-6>\n        <h2 text-center>Welcome to ERP Coin Portal!</h2>\n      </ion-col>\n      <ion-col col-3></ion-col>\n    </ion-row>\n  </ion-grid>\n  <img src="assets/imgs/erp_logo.png">\n\n\n  <form (submit)="loginAdmin(adminUser.value)" [formGroup]="adminUser">\n    <ion-list>\n      <ion-grid>\n        <ion-row>\n          <ion-col col-3></ion-col>\n          <ion-col col-6>\n            <ion-item>\n              <ion-label floating>Username</ion-label>\n              <ion-input formControlName="user" type="text"></ion-input>\n            </ion-item>\n          </ion-col>\n          <ion-col col-3></ion-col>\n        </ion-row>\n        <ion-row>\n          <ion-col col-3></ion-col>\n          <ion-col col-6>\n            <ion-item>\n              <ion-label floating>Password</ion-label>\n              <ion-input formControlName="pass" type="password"></ion-input>\n            </ion-item>\n          </ion-col>\n          <ion-col col-3></ion-col>\n        </ion-row>\n        <ion-row>\n          <ion-col col-3></ion-col>\n          <ion-col col-6>\n            <button ion-button round outline color="primary" block type="submit">Login</button>\n          </ion-col>\n          <ion-col col-3></ion-col>\n        </ion-row>\n      </ion-grid>\n    </ion-list>\n  </form>\n\n\n<div padding>\n\n</div>\n\n</ion-content>\n'/*ion-inline-end:"/Users/tristan/devops/admin-front-end/src/pages/login/login.html"*/
         }),
-        __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_2__angular_http__["b" /* Http */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__angular_http__["b" /* Http */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* NavController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* NavController */]) === "function" && _b || Object])
+        __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_2__angular_http__["b" /* Http */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__angular_http__["b" /* Http */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* NavController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* NavController */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["j" /* ToastController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["j" /* ToastController */]) === "function" && _c || Object])
     ], LoginPage);
     return LoginPage;
-    var _a, _b;
+    var _a, _b, _c;
 }());
 
 //# sourceMappingURL=login.js.map
@@ -255,6 +288,7 @@ var TabsPage = /** @class */ (function () {
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ConservationAdminMasterPage; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(29);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_http__ = __webpack_require__(50);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -266,9 +300,26 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 
 
+
 var ConservationAdminMasterPage = /** @class */ (function () {
-    function ConservationAdminMasterPage(modCtrl) {
+    function ConservationAdminMasterPage(modCtrl, http) {
+        var _this = this;
         this.modCtrl = modCtrl;
+        this.http = http;
+        this.admins = [];
+        this.admin = {};
+        var jsonArr = {};
+        jsonArr.location = "";
+        var param = JSON.stringify(jsonArr);
+        var headers = new __WEBPACK_IMPORTED_MODULE_2__angular_http__["a" /* Headers */]();
+        headers.append('Content-Type', 'application/json');
+        var options = new __WEBPACK_IMPORTED_MODULE_2__angular_http__["d" /* RequestOptions */]({ headers: headers });
+        var addr = "http://192.168.43.72:8080/admin/list";
+        this.http.get(addr).subscribe(function (data) {
+            var jsonResp = JSON.parse(data.text());
+            //alert(data.text());
+            _this.admins = jsonResp.admins;
+        });
     }
     ConservationAdminMasterPage.prototype.openModal = function () {
         var myModal = this.modCtrl.create('ConservationAdminCreatePage');
@@ -276,11 +327,12 @@ var ConservationAdminMasterPage = /** @class */ (function () {
     };
     ConservationAdminMasterPage = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["m" /* Component */])({
-            selector: 'page-conservation-admin-master',template:/*ion-inline-start:"/Users/tristan/devops/admin-front-end/src/pages/conservation-admin-master/conservation-admin-master.html"*/'<ion-header>\n  <ion-navbar>\n    <ion-title>Conservation Admins</ion-title>\n    <ion-buttons end>\n      <button ion-button icon-only (click)=\'openModal()\'>\n        <ion-icon name="add"></ion-icon>\n      </button>\n    </ion-buttons>\n  </ion-navbar>\n</ion-header>\n\n<ion-content padding>\n  <ion-list>\n  <ion-item-sliding>\n    <ion-item>\n      <ion-avatar item-start>\n        <ion-icon name="contact"></ion-icon>\n      </ion-avatar>\n      <h2>Tristan Rothman</h2>\n    </ion-item>\n    <ion-item-options side="right">\n      <button ion-button color="danger">\n        <ion-icon name="trash"></ion-icon>\n        Delete\n      </button>\n    </ion-item-options>\n  </ion-item-sliding>\n</ion-list>\n\n</ion-content>\n'/*ion-inline-end:"/Users/tristan/devops/admin-front-end/src/pages/conservation-admin-master/conservation-admin-master.html"*/
+            selector: 'page-conservation-admin-master',template:/*ion-inline-start:"/Users/tristan/devops/admin-front-end/src/pages/conservation-admin-master/conservation-admin-master.html"*/'<ion-header>\n  <ion-navbar>\n    <ion-title>Conservation Admins</ion-title>\n    <ion-buttons end>\n      <button ion-button icon-only (click)=\'openModal()\'>\n        <ion-icon name="add"></ion-icon>\n      </button>\n    </ion-buttons>\n  </ion-navbar>\n</ion-header>\n\n<ion-content padding>\n  <ion-list>\n    <ion-grid>\n      <ion-row>\n        <ion-col col-1></ion-col>\n        <ion-col col-10>\n          <ion-card *ngFor="let admin of admins" color="primary">\n            <ion-card-header>\n              {{admin.username}}\n            </ion-card-header>\n            <ion-card-content>\n              <p>{{admin.name}} {{admin.surname}}</p>\n            </ion-card-content>\n          </ion-card>\n        </ion-col>\n        <ion-col col-1></ion-col>\n      </ion-row>\n    </ion-grid>\n  </ion-list>\n</ion-content>\n'/*ion-inline-end:"/Users/tristan/devops/admin-front-end/src/pages/conservation-admin-master/conservation-admin-master.html"*/
         }),
-        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["f" /* ModalController */]])
+        __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["f" /* ModalController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["f" /* ModalController */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_2__angular_http__["b" /* Http */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__angular_http__["b" /* Http */]) === "function" && _b || Object])
     ], ConservationAdminMasterPage);
     return ConservationAdminMasterPage;
+    var _a, _b;
 }());
 
 //# sourceMappingURL=conservation-admin-master.js.map
@@ -308,7 +360,7 @@ Object(__WEBPACK_IMPORTED_MODULE_0__angular_platform_browser_dynamic__["a" /* pl
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return AppModule; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_platform_browser__ = __webpack_require__(26);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_http__ = __webpack_require__(100);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_http__ = __webpack_require__(50);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_ionic_angular__ = __webpack_require__(29);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__app_component__ = __webpack_require__(274);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__pages_tabs_tabs__ = __webpack_require__(197);

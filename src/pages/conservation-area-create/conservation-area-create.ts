@@ -275,7 +275,7 @@ export class ConservationAreaCreatePage {
   }
 
   getConservationAreas(){
-    let addr: any = "http://192.168.43.19:8080/area/list";
+    let addr: any = "http://192.168.43.72:8080/area/list";
     this.http.get(addr).subscribe
     (
       function(data)
@@ -290,7 +290,7 @@ export class ConservationAreaCreatePage {
   }
 
   addConservationArea(value: any){
-    let addr: any = "http://192.168.43.19:8080/area/add";
+    let addr: any = "http://192.168.43.72:8080/area/add";
     var jsonArr = {};
     if(this.undef)
     {

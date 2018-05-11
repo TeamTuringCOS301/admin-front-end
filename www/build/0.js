@@ -46,8 +46,8 @@ var ConservationAreaCreatePageModule = /** @class */ (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(29);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ionic_native_geolocation__ = __webpack_require__(199);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__angular_http__ = __webpack_require__(100);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__angular_forms__ = __webpack_require__(15);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__angular_http__ = __webpack_require__(50);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__angular_forms__ = __webpack_require__(13);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -279,7 +279,7 @@ var ConservationAreaCreatePage = /** @class */ (function () {
         });
     };
     ConservationAreaCreatePage.prototype.getConservationAreas = function () {
-        var addr = "http://192.168.43.19:8080/area/list";
+        var addr = "http://192.168.43.72:8080/area/list";
         this.http.get(addr).subscribe(function (data) {
             alert("Success: " + data.text());
         }, function (error) {
@@ -287,7 +287,7 @@ var ConservationAreaCreatePage = /** @class */ (function () {
         });
     };
     ConservationAreaCreatePage.prototype.addConservationArea = function (value) {
-        var addr = "http://192.168.43.19:8080/area/add";
+        var addr = "http://192.168.43.72:8080/area/add";
         var jsonArr = {};
         if (this.undef) {
             var final = [];
