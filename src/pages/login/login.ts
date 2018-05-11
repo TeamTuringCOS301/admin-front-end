@@ -1,8 +1,7 @@
 import { Component } from '@angular/core';
-import { NavController } from 'ionic-angular';
+import { NavController, ToastController } from 'ionic-angular';
 import { Http, Headers, RequestOptions} from '@angular/http';
 import { FormGroup, FormControl} from '@angular/forms';
-
 import { TabsPage } from '../tabs/tabs';
 
 @Component({
@@ -12,13 +11,13 @@ import { TabsPage } from '../tabs/tabs';
 export class LoginPage {
 
   adminUser: any;
-  constructor(public http: Http,  public navCtrl: NavController) {
+  constructor(public http: Http,  public navCtrl: NavController, public toastCtrl: ToastController) {
     this.adminUser = new FormGroup({user: new FormControl(), pass: new FormControl()});
   }
 
   public loginAdmin(value: any)
   {
-    let addr: any = "http://192.168.43.19:8080/admin/login";
+    let addr: any = "http://192.168.43.72:8080/admin/login";
     var jsonArr = {};
     jsonArr.username = value.user;
     jsonArr.password = value.pass;
@@ -31,7 +30,12 @@ export class LoginPage {
     (
       (data) =>
       {
-        this.navCtrl.push(TabsPage);
+        var jsonResp = JSON.parse(data.text());
+        if(jsonResp.success)
+        {
+          this.presentToast("Logged in!")
+          this.navCtrl.push(TabsPage);
+        }
       },
       (error) =>
       {
@@ -39,6 +43,18 @@ export class LoginPage {
       }
     );
 
+  }
+
+  presentToast(text){
+    let toast = this.toastCtrl.create(
+      {
+        message: text,
+        duration: 1500,
+        position: 'bottom',
+        dismissOnPageChange: false
+      }
+    );
+    toast.present();
   }
 
 }

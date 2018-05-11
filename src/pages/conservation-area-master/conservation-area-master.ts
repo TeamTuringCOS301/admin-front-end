@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { IonicPage, ModalController, NavParams } from 'ionic-angular';
+import { Http, RequestOptions, Headers } from '@angular/http';
 
 /**
  * Generated class for the ConservationAreaMasterPage page.
@@ -15,7 +16,28 @@ import { IonicPage, ModalController, NavParams } from 'ionic-angular';
 })
 export class ConservationAreaMasterPage {
 
-  constructor(public modCtrl: ModalController, public navParams: NavParams) {
+  area:any;
+  areas:any;
+
+  constructor(public modCtrl: ModalController, public navParams: NavParams, public http: Http) {
+    this.areas = [];
+    this.area = {};
+    var jsonArr: any = {};
+    jsonArr.location = "";
+    var param = JSON.stringify(jsonArr);
+    let headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    let options = new RequestOptions({headers: headers});
+    var addr = "http://192.168.43.72:8080/area/list";
+    this.http.get(addr).subscribe
+    (
+      (data) => //Success
+      {
+        var jsonResp = JSON.parse(data.text());
+        //alert(data.text());
+        this.areas = jsonResp.areas;
+      }
+    );
   }
 
   ionViewDidLoad() {
