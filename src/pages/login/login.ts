@@ -17,7 +17,7 @@ export class LoginPage {
 
   public loginAdmin(value: any)
   {
-    let addr: any = "http://192.168.43.72:8080/admin/login";
+    let addr: any = "http://192.168.43.47:8080/admin/login";
     var jsonArr = {};
     jsonArr.username = value.user;
     jsonArr.password = value.pass;

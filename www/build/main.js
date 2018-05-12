@@ -7,7 +7,7 @@ webpackJsonp([4],{
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ConservationAreaMasterPage; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(29);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_http__ = __webpack_require__(50);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_http__ = __webpack_require__(40);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -40,7 +40,7 @@ var ConservationAreaMasterPage = /** @class */ (function () {
         var headers = new __WEBPACK_IMPORTED_MODULE_2__angular_http__["a" /* Headers */]();
         headers.append('Content-Type', 'application/json');
         var options = new __WEBPACK_IMPORTED_MODULE_2__angular_http__["d" /* RequestOptions */]({ headers: headers });
-        var addr = "http://192.168.43.72:8080/area/list";
+        var addr = "http://192.168.43.47:8080/area/list";
         this.http.get(addr).subscribe(function (data) {
             var jsonResp = JSON.parse(data.text());
             //alert(data.text());
@@ -58,10 +58,9 @@ var ConservationAreaMasterPage = /** @class */ (function () {
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["m" /* Component */])({
             selector: 'page-conservation-area-master',template:/*ion-inline-start:"/Users/tristan/devops/admin-front-end/src/pages/conservation-area-master/conservation-area-master.html"*/'<!--\n  Generated template for the ConservationAreaMasterPage page.\n\n  See http://ionicframework.com/docs/components/#navigation for more info on\n  Ionic pages and navigation.\n-->\n<ion-header>\n\n  <ion-navbar>\n    <ion-title>Conservation Areas</ion-title>\n    <ion-buttons end>\n      <button ion-button icon-only (click)=\'openModal()\'>\n        <ion-icon name="add"></ion-icon>\n      </button>\n    </ion-buttons>\n  </ion-navbar>\n\n</ion-header>\n\n\n<ion-content padding>\n  <ion-list>\n    <ion-grid>\n      <ion-row>\n        <ion-col col-1></ion-col>\n        <ion-col col-10>\n          <ion-card *ngFor="let area of areas" color="primary">\n            <ion-card-header>\n              {{area.name}}\n            </ion-card-header>\n            <ion-card-content>\n              <p>Province: {{area.province}}, City: {{area.city}}</p>\n            </ion-card-content>\n          </ion-card>\n        </ion-col>\n        <ion-col col-1></ion-col>\n      </ion-row>\n    </ion-grid>\n  </ion-list>\n</ion-content>\n'/*ion-inline-end:"/Users/tristan/devops/admin-front-end/src/pages/conservation-area-master/conservation-area-master.html"*/,
         }),
-        __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["f" /* ModalController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["f" /* ModalController */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["h" /* NavParams */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["h" /* NavParams */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_2__angular_http__["b" /* Http */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__angular_http__["b" /* Http */]) === "function" && _c || Object])
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["f" /* ModalController */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["h" /* NavParams */], __WEBPACK_IMPORTED_MODULE_2__angular_http__["b" /* Http */]])
     ], ConservationAreaMasterPage);
     return ConservationAreaMasterPage;
-    var _a, _b, _c;
 }());
 
 //# sourceMappingURL=conservation-area-master.js.map
@@ -135,11 +134,11 @@ webpackEmptyAsyncContext.id = 112;
 
 var map = {
 	"../pages/conservation-admin-create/conservation-admin-create.module": [
-		275,
+		276,
 		1
 	],
 	"../pages/conservation-area-create/conservation-area-create.module": [
-		276,
+		275,
 		0
 	],
 	"../pages/conservation-area-master/conservation-area-master.module": [
@@ -174,7 +173,7 @@ module.exports = webpackAsyncContext;
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return LoginPage; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(29);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_http__ = __webpack_require__(50);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_http__ = __webpack_require__(40);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__angular_forms__ = __webpack_require__(13);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__tabs_tabs__ = __webpack_require__(197);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -200,7 +199,7 @@ var LoginPage = /** @class */ (function () {
     }
     LoginPage.prototype.loginAdmin = function (value) {
         var _this = this;
-        var addr = "http://192.168.43.72:8080/admin/login";
+        var addr = "http://192.168.43.47:8080/admin/login";
         var jsonArr = {};
         jsonArr.username = value.user;
         jsonArr.password = value.pass;
@@ -231,10 +230,9 @@ var LoginPage = /** @class */ (function () {
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["m" /* Component */])({
             selector: 'page-login',template:/*ion-inline-start:"/Users/tristan/devops/admin-front-end/src/pages/login/login.html"*/'<ion-header>\n  <ion-navbar>\n    <ion-title>Login</ion-title>\n  </ion-navbar>\n</ion-header>\n\n<ion-content padding>\n  <ion-grid>\n    <ion-row>\n      <ion-col col-3></ion-col>\n      <ion-col col-6>\n        <h2 text-center>Welcome to ERP Coin Portal!</h2>\n      </ion-col>\n      <ion-col col-3></ion-col>\n    </ion-row>\n  </ion-grid>\n  <img src="assets/imgs/erp_logo.png">\n\n\n  <form (submit)="loginAdmin(adminUser.value)" [formGroup]="adminUser">\n    <ion-list>\n      <ion-grid>\n        <ion-row>\n          <ion-col col-3></ion-col>\n          <ion-col col-6>\n            <ion-item>\n              <ion-label floating>Username</ion-label>\n              <ion-input formControlName="user" type="text"></ion-input>\n            </ion-item>\n          </ion-col>\n          <ion-col col-3></ion-col>\n        </ion-row>\n        <ion-row>\n          <ion-col col-3></ion-col>\n          <ion-col col-6>\n            <ion-item>\n              <ion-label floating>Password</ion-label>\n              <ion-input formControlName="pass" type="password"></ion-input>\n            </ion-item>\n          </ion-col>\n          <ion-col col-3></ion-col>\n        </ion-row>\n        <ion-row>\n          <ion-col col-3></ion-col>\n          <ion-col col-6>\n            <button ion-button round outline color="primary" block type="submit">Login</button>\n          </ion-col>\n          <ion-col col-3></ion-col>\n        </ion-row>\n      </ion-grid>\n    </ion-list>\n  </form>\n\n\n<div padding>\n\n</div>\n\n</ion-content>\n'/*ion-inline-end:"/Users/tristan/devops/admin-front-end/src/pages/login/login.html"*/
         }),
-        __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_2__angular_http__["b" /* Http */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__angular_http__["b" /* Http */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* NavController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* NavController */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["j" /* ToastController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["j" /* ToastController */]) === "function" && _c || Object])
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_2__angular_http__["b" /* Http */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* NavController */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["j" /* ToastController */]])
     ], LoginPage);
     return LoginPage;
-    var _a, _b, _c;
 }());
 
 //# sourceMappingURL=login.js.map
@@ -288,7 +286,7 @@ var TabsPage = /** @class */ (function () {
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ConservationAdminMasterPage; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(29);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_http__ = __webpack_require__(50);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_http__ = __webpack_require__(40);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -314,7 +312,7 @@ var ConservationAdminMasterPage = /** @class */ (function () {
         var headers = new __WEBPACK_IMPORTED_MODULE_2__angular_http__["a" /* Headers */]();
         headers.append('Content-Type', 'application/json');
         var options = new __WEBPACK_IMPORTED_MODULE_2__angular_http__["d" /* RequestOptions */]({ headers: headers });
-        var addr = "http://192.168.43.72:8080/admin/list";
+        var addr = "http://192.168.43.47:8080/admin/list";
         this.http.get(addr).subscribe(function (data) {
             var jsonResp = JSON.parse(data.text());
             //alert(data.text());
@@ -360,7 +358,7 @@ Object(__WEBPACK_IMPORTED_MODULE_0__angular_platform_browser_dynamic__["a" /* pl
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return AppModule; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_platform_browser__ = __webpack_require__(26);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_http__ = __webpack_require__(50);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_http__ = __webpack_require__(40);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_ionic_angular__ = __webpack_require__(29);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__app_component__ = __webpack_require__(274);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__pages_tabs_tabs__ = __webpack_require__(197);
@@ -408,8 +406,8 @@ var AppModule = /** @class */ (function () {
                 __WEBPACK_IMPORTED_MODULE_2__angular_http__["c" /* HttpModule */],
                 __WEBPACK_IMPORTED_MODULE_3_ionic_angular__["c" /* IonicModule */].forRoot(__WEBPACK_IMPORTED_MODULE_4__app_component__["a" /* MyApp */], {}, {
                     links: [
-                        { loadChildren: '../pages/conservation-admin-create/conservation-admin-create.module#ConservationAdminCreatePageModule', name: 'ConservationAdminCreatePage', segment: 'conservation-admin-create', priority: 'low', defaultHistory: [] },
                         { loadChildren: '../pages/conservation-area-create/conservation-area-create.module#ConservationAreaCreatePageModule', name: 'ConservationAreaCreatePage', segment: 'conservation-area-create', priority: 'low', defaultHistory: [] },
+                        { loadChildren: '../pages/conservation-admin-create/conservation-admin-create.module#ConservationAdminCreatePageModule', name: 'ConservationAdminCreatePage', segment: 'conservation-admin-create', priority: 'low', defaultHistory: [] },
                         { loadChildren: '../pages/conservation-area-master/conservation-area-master.module#ConservationAreaMasterPageModule', name: 'ConservationAreaMasterPage', segment: 'conservation-area-master', priority: 'low', defaultHistory: [] },
                         { loadChildren: '../pages/store-master/store-master.module#StoreMasterPageModule', name: 'StoreMasterPage', segment: 'store-master', priority: 'low', defaultHistory: [] }
                     ]
