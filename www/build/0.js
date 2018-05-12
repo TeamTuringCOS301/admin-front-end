@@ -1,6 +1,6 @@
 webpackJsonp([0],{
 
-/***/ 276:
+/***/ 275:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -8,7 +8,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ConservationAreaCreatePageModule", function() { return ConservationAreaCreatePageModule; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(29);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__conservation_area_create__ = __webpack_require__(280);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__conservation_area_create__ = __webpack_require__(279);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -38,7 +38,7 @@ var ConservationAreaCreatePageModule = /** @class */ (function () {
 
 /***/ }),
 
-/***/ 280:
+/***/ 279:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -46,7 +46,7 @@ var ConservationAreaCreatePageModule = /** @class */ (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(29);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ionic_native_geolocation__ = __webpack_require__(199);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__angular_http__ = __webpack_require__(50);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__angular_http__ = __webpack_require__(40);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__angular_forms__ = __webpack_require__(13);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -279,7 +279,7 @@ var ConservationAreaCreatePage = /** @class */ (function () {
         });
     };
     ConservationAreaCreatePage.prototype.getConservationAreas = function () {
-        var addr = "http://192.168.43.72:8080/area/list";
+        var addr = "http://192.168.43.47:8080/area/list";
         this.http.get(addr).subscribe(function (data) {
             alert("Success: " + data.text());
         }, function (error) {
@@ -287,7 +287,7 @@ var ConservationAreaCreatePage = /** @class */ (function () {
         });
     };
     ConservationAreaCreatePage.prototype.addConservationArea = function (value) {
-        var addr = "http://192.168.43.72:8080/area/add";
+        var addr = "http://192.168.43.47:8080/area/add";
         var jsonArr = {};
         if (this.undef) {
             var final = [];
@@ -326,10 +326,9 @@ var ConservationAreaCreatePage = /** @class */ (function () {
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["m" /* Component */])({
             selector: 'page-conservation-area-create',template:/*ion-inline-start:"/Users/tristan/devops/admin-front-end/src/pages/conservation-area-create/conservation-area-create.html"*/'<!--\n  Generated template for the ConservationAreaCreatePage page.\n\n  See http://ionicframework.com/docs/components/#navigation for more info on\n  Ionic pages and navigation.\n-->\n<ion-header>\n\n  <ion-navbar>\n    <ion-title>Create Conservation Area</ion-title>\n  </ion-navbar>\n  <ion-toolbar color="primary">\n    <ion-grid>\n      <ion-row>\n        <ion-col col-10>\n          <ion-searchbar #pacinput id="pacinput" [(ngModel)]="autocomplete.input" (ionInput)="updateSearchResults()" placeholder="Search for a place"></ion-searchbar>\n        </ion-col>\n        <ion-col col-2>\n          <button class="getborder-btn" ion-button round outline (click)="getBorder()" color="light" [hidden]="undef == true"> Get Border </button>\n          <button class="clear-btn" ion-button round outline (click)="deleteSelectedShape()" color="light" [hidden]="undef == false"> Clear </button>\n        </ion-col>\n      </ion-row>\n    </ion-grid>\n  </ion-toolbar>\n</ion-header>\n\n\n<ion-content padding>\n  <ion-list [hidden]="autocompleteItems.length == 0">\n    <ion-item *ngFor="let item of autocompleteItems" tappable (click)="selectSearchResult(item, $event)">\n      {{ item.description }}\n    </ion-item>\n\n  </ion-list>\n\n  <div #map id="map"></div>\n\n</ion-content>\n\n<ion-footer>\n  <form (submit)="addConservationArea(conservationArea.value)" [formGroup]="conservationArea">\n    <ion-grid>\n      <ion-row>\n        <ion-col col-6>\n          <ion-item>\n            <ion-label floating>Province/State</ion-label>\n            <ion-input formControlName="province" type="text"></ion-input>\n          </ion-item>\n        </ion-col>\n        <ion-col col-6>\n          <ion-item>\n            <ion-label floating>City</ion-label>\n            <ion-input formControlName="city" type="text"></ion-input>\n          </ion-item>\n        </ion-col>\n\n      </ion-row>\n      <ion-row>\n        <ion-col col-3></ion-col>\n        <ion-col col-6>\n          <ion-item>\n            <ion-label>Conservation Admin</ion-label>\n            <ion-select formControlName="admin" [(ngModel)]="admin">\n              <ion-option value="admin">Admin</ion-option>\n            </ion-select>\n          </ion-item>\n        </ion-col>\n        <ion-col col-3></ion-col>\n      </ion-row>\n    </ion-grid>\n\n\n    <button ion-button round outline type="submit">Add</button>\n  </form>\n  <!--<button class="geolocation-btn" ion-button round outline (click)="tryGeolocation()"> Try Geolocation </button>-->\n</ion-footer>\n'/*ion-inline-end:"/Users/tristan/devops/admin-front-end/src/pages/conservation-area-create/conservation-area-create.html"*/,
         }),
-        __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_0__angular_core__["V" /* Renderer */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_0__angular_core__["V" /* Renderer */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_3__angular_http__["b" /* Http */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__angular_http__["b" /* Http */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* NavController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* NavController */]) === "function" && _c || Object, typeof (_d = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["h" /* NavParams */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["h" /* NavParams */]) === "function" && _d || Object, typeof (_e = typeof __WEBPACK_IMPORTED_MODULE_2__ionic_native_geolocation__["a" /* Geolocation */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__ionic_native_geolocation__["a" /* Geolocation */]) === "function" && _e || Object, typeof (_f = typeof __WEBPACK_IMPORTED_MODULE_0__angular_core__["M" /* NgZone */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_0__angular_core__["M" /* NgZone */]) === "function" && _f || Object, typeof (_g = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["e" /* LoadingController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["e" /* LoadingController */]) === "function" && _g || Object])
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_0__angular_core__["V" /* Renderer */], __WEBPACK_IMPORTED_MODULE_3__angular_http__["b" /* Http */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* NavController */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["h" /* NavParams */], __WEBPACK_IMPORTED_MODULE_2__ionic_native_geolocation__["a" /* Geolocation */], __WEBPACK_IMPORTED_MODULE_0__angular_core__["M" /* NgZone */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["e" /* LoadingController */]])
     ], ConservationAreaCreatePage);
     return ConservationAreaCreatePage;
-    var _a, _b, _c, _d, _e, _f, _g;
 }());
 
 //# sourceMappingURL=conservation-area-create.js.map
