@@ -3,6 +3,7 @@ import { IonicPage, NavController, LoadingController, NavParams, ViewController 
 import { Geolocation } from '@ionic-native/geolocation';
 import { Http, Headers, RequestOptions} from '@angular/http';
 import { FormGroup, FormControl} from '@angular/forms';
+import { CONFIG } from '../../app-config';
 
 /**
  * Generated class for the ConservationAreaCreatePage page.
@@ -280,7 +281,7 @@ export class ConservationAreaCreatePage {
 
   getConservationAreas(){
     let options = new RequestOptions({withCredentials: true});
-    let addr: any = "http://localhost:8080/area/list";
+    let addr: any = CONFIG.url + "/area/list";
     this.http.get(addr, options).subscribe
     (
       function(data)
@@ -295,7 +296,7 @@ export class ConservationAreaCreatePage {
   }
 
   addConservationArea(value: any){
-    let addr: any = "http://localhost:8080/area/add";
+    let addr: any = CONFIG.url + "/area/add";
     var jsonArr = {
       "border":[],
       "name":"",

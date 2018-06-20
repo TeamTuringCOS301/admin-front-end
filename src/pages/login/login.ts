@@ -3,6 +3,7 @@ import { NavController, ToastController } from 'ionic-angular';
 import { Http, Headers, RequestOptions} from '@angular/http';
 import { FormGroup, FormControl} from '@angular/forms';
 import { TabsPage } from '../tabs/tabs';
+import { CONFIG } from '../../app-config';
 
 @Component({
   selector: 'page-login',
@@ -17,7 +18,7 @@ export class LoginPage {
 
   public loginAdmin(value: any)
   {
-    let addr: any = "http://localhost:8080/admin/login";
+    let addr: any = CONFIG.url + "/admin/login";
     var jsonArr = {
       "username":"",
       "password":""
