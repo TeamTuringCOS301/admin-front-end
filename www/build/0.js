@@ -1,6 +1,6 @@
 webpackJsonp([0],{
 
-/***/ 275:
+/***/ 276:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -8,7 +8,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ConservationAreaCreatePageModule", function() { return ConservationAreaCreatePageModule; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(29);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__conservation_area_create__ = __webpack_require__(279);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__conservation_area_create__ = __webpack_require__(280);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -38,7 +38,7 @@ var ConservationAreaCreatePageModule = /** @class */ (function () {
 
 /***/ }),
 
-/***/ 279:
+/***/ 280:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -63,10 +63,10 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 var ConservationAreaCreatePage = /** @class */ (function () {
-    function ConservationAreaCreatePage(renderer, http, navCtrl, navParams, geolocation, zone, loadingCtrl) {
+    function ConservationAreaCreatePage(renderer, http, view, navParams, geolocation, zone, loadingCtrl) {
         this.renderer = renderer;
         this.http = http;
-        this.navCtrl = navCtrl;
+        this.view = view;
         this.navParams = navParams;
         this.geolocation = geolocation;
         this.zone = zone;
@@ -88,6 +88,9 @@ var ConservationAreaCreatePage = /** @class */ (function () {
     ConservationAreaCreatePage.prototype.ionViewDidLoad = function () {
         console.log('ionViewDidLoad ConservationAreaCreatePage');
         this.initMap();
+    };
+    ConservationAreaCreatePage.prototype.closeModal = function () {
+        this.view.dismiss();
     };
     ConservationAreaCreatePage.prototype.clearSelection = function () {
         if (this.selectedShape) {
@@ -151,10 +154,10 @@ var ConservationAreaCreatePage = /** @class */ (function () {
                 }
             });
             google.maps.event.addListener(this.drawingManager, 'drawingmode_changed', this.clearSelection);
-            google.maps.event.addListener(map, 'click', this.clearSelection);
+            google.maps.event.addListener(this.map, 'click', this.clearSelection);
             //google.maps.event.addDomListener(document.getElementById('delete-button'), 'click', this.deleteSelectedShape);
             //google.maps.event.addDomListener(document.getElementById('confirm-selection'), 'click', this.confirm);
-            this.drawingManager.setMap(map);
+            this.drawingManager.setMap(this.map);
         }
         else {
             this.map = new google.maps.Map(document.getElementById('map'), {
@@ -279,16 +282,23 @@ var ConservationAreaCreatePage = /** @class */ (function () {
         });
     };
     ConservationAreaCreatePage.prototype.getConservationAreas = function () {
-        var addr = "http://192.168.43.47:8080/area/list";
-        this.http.get(addr).subscribe(function (data) {
+        var options = new __WEBPACK_IMPORTED_MODULE_3__angular_http__["d" /* RequestOptions */]({ withCredentials: true });
+        var addr = "http://localhost:8080/area/list";
+        this.http.get(addr, options).subscribe(function (data) {
             alert("Success: " + data.text());
         }, function (error) {
             alert("Error: " + error);
         });
     };
     ConservationAreaCreatePage.prototype.addConservationArea = function (value) {
-        var addr = "http://192.168.43.47:8080/area/add";
-        var jsonArr = {};
+        var addr = "http://localhost:8080/area/add";
+        var jsonArr = {
+            "border": [],
+            "name": "",
+            "province": "",
+            "city": "",
+            "admin": ""
+        };
         if (this.undef) {
             var final = [];
             var singleCoord = { lat: 0.0, lng: 0.0 };
@@ -315,7 +325,7 @@ var ConservationAreaCreatePage = /** @class */ (function () {
         //console.log(jsonArr);
         var headers = new __WEBPACK_IMPORTED_MODULE_3__angular_http__["a" /* Headers */]();
         headers.append('Content-Type', 'application/json');
-        var options = new __WEBPACK_IMPORTED_MODULE_3__angular_http__["d" /* RequestOptions */]({ headers: headers });
+        var options = new __WEBPACK_IMPORTED_MODULE_3__angular_http__["d" /* RequestOptions */]({ headers: headers, withCredentials: true });
         this.http.post(addr, param, options).subscribe(function (data) {
             alert("Success: " + data.text());
         }, function (error) {
@@ -324,9 +334,9 @@ var ConservationAreaCreatePage = /** @class */ (function () {
     };
     ConservationAreaCreatePage = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["m" /* Component */])({
-            selector: 'page-conservation-area-create',template:/*ion-inline-start:"/Users/tristan/devops/admin-front-end/src/pages/conservation-area-create/conservation-area-create.html"*/'<!--\n  Generated template for the ConservationAreaCreatePage page.\n\n  See http://ionicframework.com/docs/components/#navigation for more info on\n  Ionic pages and navigation.\n-->\n<ion-header>\n\n  <ion-navbar>\n    <ion-title>Create Conservation Area</ion-title>\n  </ion-navbar>\n  <ion-toolbar color="primary">\n    <ion-grid>\n      <ion-row>\n        <ion-col col-10>\n          <ion-searchbar #pacinput id="pacinput" [(ngModel)]="autocomplete.input" (ionInput)="updateSearchResults()" placeholder="Search for a place"></ion-searchbar>\n        </ion-col>\n        <ion-col col-2>\n          <button class="getborder-btn" ion-button round outline (click)="getBorder()" color="light" [hidden]="undef == true"> Get Border </button>\n          <button class="clear-btn" ion-button round outline (click)="deleteSelectedShape()" color="light" [hidden]="undef == false"> Clear </button>\n        </ion-col>\n      </ion-row>\n    </ion-grid>\n  </ion-toolbar>\n</ion-header>\n\n\n<ion-content padding>\n  <ion-list [hidden]="autocompleteItems.length == 0">\n    <ion-item *ngFor="let item of autocompleteItems" tappable (click)="selectSearchResult(item, $event)">\n      {{ item.description }}\n    </ion-item>\n\n  </ion-list>\n\n  <div #map id="map"></div>\n\n</ion-content>\n\n<ion-footer>\n  <form (submit)="addConservationArea(conservationArea.value)" [formGroup]="conservationArea">\n    <ion-grid>\n      <ion-row>\n        <ion-col col-6>\n          <ion-item>\n            <ion-label floating>Province/State</ion-label>\n            <ion-input formControlName="province" type="text"></ion-input>\n          </ion-item>\n        </ion-col>\n        <ion-col col-6>\n          <ion-item>\n            <ion-label floating>City</ion-label>\n            <ion-input formControlName="city" type="text"></ion-input>\n          </ion-item>\n        </ion-col>\n\n      </ion-row>\n      <ion-row>\n        <ion-col col-3></ion-col>\n        <ion-col col-6>\n          <ion-item>\n            <ion-label>Conservation Admin</ion-label>\n            <ion-select formControlName="admin" [(ngModel)]="admin">\n              <ion-option value="admin">Admin</ion-option>\n            </ion-select>\n          </ion-item>\n        </ion-col>\n        <ion-col col-3></ion-col>\n      </ion-row>\n    </ion-grid>\n\n\n    <button ion-button round outline type="submit">Add</button>\n  </form>\n  <!--<button class="geolocation-btn" ion-button round outline (click)="tryGeolocation()"> Try Geolocation </button>-->\n</ion-footer>\n'/*ion-inline-end:"/Users/tristan/devops/admin-front-end/src/pages/conservation-area-create/conservation-area-create.html"*/,
+            selector: 'page-conservation-area-create',template:/*ion-inline-start:"/Users/tristan/devops/admin-front-end/src/pages/conservation-area-create/conservation-area-create.html"*/'<!--\n  Generated template for the ConservationAreaCreatePage page.\n\n  See http://ionicframework.com/docs/components/#navigation for more info on\n  Ionic pages and navigation.\n-->\n<ion-header>\n\n  <ion-navbar>\n    <ion-title>Create Conservation Area</ion-title>\n    <ion-buttons end>\n        <button ion-button icon-only (click)="closeModal()"><ion-icon name="close-circle"></ion-icon></button>\n    </ion-buttons>\n  </ion-navbar>\n  <ion-toolbar color="primary">\n    <ion-grid>\n      <ion-row>\n        <ion-col col-10>\n          <ion-searchbar #pacinput id="pacinput" [(ngModel)]="autocomplete.input" (ionInput)="updateSearchResults()" placeholder="Search for a place"></ion-searchbar>\n        </ion-col>\n        <ion-col col-2>\n          <button class="getborder-btn" ion-button round outline (click)="getBorder()" color="light" [hidden]="undef == true"> Get Border </button>\n          <button class="clear-btn" ion-button round outline (click)="deleteSelectedShape()" color="light" [hidden]="undef == false"> Clear </button>\n        </ion-col>\n      </ion-row>\n    </ion-grid>\n  </ion-toolbar>\n</ion-header>\n\n\n<ion-content padding>\n  <ion-list [hidden]="autocompleteItems.length == 0">\n    <ion-item *ngFor="let item of autocompleteItems" tappable (click)="selectSearchResult(item, $event)">\n      {{ item.description }}\n    </ion-item>\n\n  </ion-list>\n\n  <div #map id="map"></div>\n\n</ion-content>\n\n<ion-footer>\n  <form (submit)="addConservationArea(conservationArea.value)" [formGroup]="conservationArea">\n    <ion-grid>\n      <ion-row>\n        <ion-col col-6>\n          <ion-item>\n            <ion-label floating>Province/State</ion-label>\n            <ion-input formControlName="province" type="text"></ion-input>\n          </ion-item>\n        </ion-col>\n        <ion-col col-6>\n          <ion-item>\n            <ion-label floating>City</ion-label>\n            <ion-input formControlName="city" type="text"></ion-input>\n          </ion-item>\n        </ion-col>\n\n      </ion-row>\n      <ion-row>\n        <ion-col col-3></ion-col>\n        <ion-col col-6>\n          <ion-item>\n            <ion-label>Conservation Admin</ion-label>\n            <ion-select formControlName="admin" [(ngModel)]="admin">\n              <ion-option value="admin">Admin</ion-option>\n            </ion-select>\n          </ion-item>\n        </ion-col>\n        <ion-col col-3></ion-col>\n      </ion-row>\n    </ion-grid>\n\n\n    <button ion-button round outline type="submit">Add</button>\n  </form>\n  <!--<button class="geolocation-btn" ion-button round outline (click)="tryGeolocation()"> Try Geolocation </button>-->\n</ion-footer>\n'/*ion-inline-end:"/Users/tristan/devops/admin-front-end/src/pages/conservation-area-create/conservation-area-create.html"*/,
         }),
-        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_0__angular_core__["V" /* Renderer */], __WEBPACK_IMPORTED_MODULE_3__angular_http__["b" /* Http */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* NavController */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["h" /* NavParams */], __WEBPACK_IMPORTED_MODULE_2__ionic_native_geolocation__["a" /* Geolocation */], __WEBPACK_IMPORTED_MODULE_0__angular_core__["M" /* NgZone */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["e" /* LoadingController */]])
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_0__angular_core__["V" /* Renderer */], __WEBPACK_IMPORTED_MODULE_3__angular_http__["b" /* Http */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["k" /* ViewController */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["h" /* NavParams */], __WEBPACK_IMPORTED_MODULE_2__ionic_native_geolocation__["a" /* Geolocation */], __WEBPACK_IMPORTED_MODULE_0__angular_core__["M" /* NgZone */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["e" /* LoadingController */]])
     ], ConservationAreaCreatePage);
     return ConservationAreaCreatePage;
 }());

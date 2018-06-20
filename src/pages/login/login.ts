@@ -17,14 +17,17 @@ export class LoginPage {
 
   public loginAdmin(value: any)
   {
-    let addr: any = "http://192.168.43.47:8080/admin/login";
-    var jsonArr = {};
+    let addr: any = "http://localhost:8080/admin/login";
+    var jsonArr = {
+      "username":"",
+      "password":""
+    };
     jsonArr.username = value.user;
     jsonArr.password = value.pass;
     var param = jsonArr;
     let headers = new Headers();
     headers.append('Content-Type', 'application/json');
-    let options = new RequestOptions({headers: headers});
+    let options = new RequestOptions({headers: headers/*, withCredentials: true*/});
 
     this.http.post(addr, param, options).subscribe
     (

@@ -10,4 +10,6 @@ import { ConservationAdminCreatePage } from './conservation-admin-create';
     IonicPageModule.forChild(ConservationAdminCreatePage),
   ],
 })
-export class ConservationAdminCreatePageModule {}
+export class ConservationAdminCreatePageModule {
+  
+}

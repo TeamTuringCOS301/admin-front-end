@@ -1,5 +1,5 @@
 import { Component, NgZone, Renderer } from '@angular/core';
-import { IonicPage, NavController, LoadingController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, LoadingController, NavParams, ViewController } from 'ionic-angular';
 import { Geolocation } from '@ionic-native/geolocation';
 import { Http, Headers, RequestOptions} from '@angular/http';
 import { FormGroup, FormControl} from '@angular/forms';
@@ -34,7 +34,7 @@ export class ConservationAreaCreatePage {
   selectedShape: any;
   location: any;
 
-  constructor(public renderer: Renderer, public http: Http, public navCtrl: NavController, public navParams: NavParams, public geolocation: Geolocation, public zone: NgZone, public loadingCtrl: LoadingController) {
+  constructor(public renderer: Renderer, public http: Http, public view: ViewController, public navParams: NavParams, public geolocation: Geolocation, public zone: NgZone, public loadingCtrl: LoadingController) {
     this.GoogleAutocomplete = new google.maps.places.AutocompleteService();
     this.autocomplete = { input: '' };
     this.autocompleteItems = [];
@@ -58,6 +58,10 @@ export class ConservationAreaCreatePage {
   ionViewDidLoad() {
     console.log('ionViewDidLoad ConservationAreaCreatePage');
     this.initMap();
+  }
+
+  closeModal(){
+    this.view.dismiss();
   }
 
   clearSelection() {
@@ -134,11 +138,11 @@ export class ConservationAreaCreatePage {
           });
 
   		google.maps.event.addListener(this.drawingManager, 'drawingmode_changed', this.clearSelection);
-          google.maps.event.addListener(map, 'click', this.clearSelection);
+          google.maps.event.addListener(this.map, 'click', this.clearSelection);
           //google.maps.event.addDomListener(document.getElementById('delete-button'), 'click', this.deleteSelectedShape);
   		//google.maps.event.addDomListener(document.getElementById('confirm-selection'), 'click', this.confirm);
 
-          this.drawingManager.setMap(map);
+          this.drawingManager.setMap(this.map);
     }
     else{
       this.map = new google.maps.Map(document.getElementById('map'), {
@@ -275,8 +279,9 @@ export class ConservationAreaCreatePage {
   }
 
   getConservationAreas(){
-    let addr: any = "http://192.168.43.47:8080/area/list";
-    this.http.get(addr).subscribe
+    let options = new RequestOptions({withCredentials: true});
+    let addr: any = "http://localhost:8080/area/list";
+    this.http.get(addr, options).subscribe
     (
       function(data)
       {
@@ -290,8 +295,14 @@ export class ConservationAreaCreatePage {
   }
 
   addConservationArea(value: any){
-    let addr: any = "http://192.168.43.47:8080/area/add";
-    var jsonArr = {};
+    let addr: any = "http://localhost:8080/area/add";
+    var jsonArr = {
+      "border":[],
+      "name":"",
+      "province":"",
+      "city":"",
+      "admin":"" 
+    };
     if(this.undef)
     {
       var final = [];
@@ -322,7 +333,7 @@ export class ConservationAreaCreatePage {
 
     let headers = new Headers();
     headers.append('Content-Type', 'application/json');
-    let options = new RequestOptions({headers: headers});
+    let options = new RequestOptions({headers: headers, withCredentials: true});
 
     this.http.post(addr, param, options).subscribe
     (
