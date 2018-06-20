@@ -15,17 +15,17 @@ export class ConservationAdminMasterPage {
     this.admin = {};
     var jsonArr: any = {};
     jsonArr.location = "";
-    var param = JSON.stringify(jsonArr);
+    //var param = JSON.stringify(jsonArr);
     let headers = new Headers();
     headers.append('Content-Type', 'application/json');
-    let options = new RequestOptions({headers: headers});
-    var addr = "http://192.168.43.47:8080/admin/list";
-    this.http.get(addr).subscribe
+    let options = new RequestOptions({withCredentials: true});
+    var addr = "http://localhost:8080/admin/list";
+    this.http.get(addr, options).subscribe
     (
       (data) => //Success
       {
         var jsonResp = JSON.parse(data.text());
-        //alert(data.text());
+        console.log(data.text());
         this.admins = jsonResp.admins;
       }
     );

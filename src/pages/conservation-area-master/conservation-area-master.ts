@@ -27,8 +27,8 @@ export class ConservationAreaMasterPage {
     var param = JSON.stringify(jsonArr);
     let headers = new Headers();
     headers.append('Content-Type', 'application/json');
-    let options = new RequestOptions({headers: headers});
-    var addr = "http://192.168.43.47:8080/area/list";
+    let options = new RequestOptions({headers: headers, withCredentials: true});
+    var addr = "http://localhost:8080/area/list";
     this.http.get(addr).subscribe
     (
       (data) => //Success
