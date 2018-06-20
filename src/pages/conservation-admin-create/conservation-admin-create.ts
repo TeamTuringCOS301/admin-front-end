@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, ViewController } from 'ionic-angular';
 import { Http, Headers, RequestOptions} from '@angular/http';
 import { FormGroup, FormControl } from '@angular/forms';
+import { CONFIG } from '../../app-config';
 
 /**
  * Generated class for the ConservationAdminCreatePage page.
@@ -31,7 +32,7 @@ export class ConservationAdminCreatePage {
   }
 
   addConservationAdmin(value : any){
-    let addr: any = "http://localhost:8080/admin/add";
+    let addr: any = CONFIG.url + "/admin/add";
     var jsonArr = {
       "username":"",
       "email":"",

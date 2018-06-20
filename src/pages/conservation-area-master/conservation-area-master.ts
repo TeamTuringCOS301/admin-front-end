@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { IonicPage, ModalController, NavParams } from 'ionic-angular';
 import { Http, RequestOptions, Headers } from '@angular/http';
+import { CONFIG } from '../../app-config';
 
 /**
  * Generated class for the ConservationAreaMasterPage page.
@@ -28,7 +29,7 @@ export class ConservationAreaMasterPage {
     let headers = new Headers();
     headers.append('Content-Type', 'application/json');
     let options = new RequestOptions({headers: headers, withCredentials: true});
-    var addr = "http://localhost:8080/area/list";
+    var addr = CONFIG.url + "/area/list";
     this.http.get(addr).subscribe
     (
       (data) => //Success

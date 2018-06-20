@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { ModalController } from 'ionic-angular';
 import { Http, RequestOptions, Headers } from '@angular/http';
+import { CONFIG } from '../../app-config';
 
 @Component({
   selector: 'page-conservation-admin-master',
@@ -19,7 +20,7 @@ export class ConservationAdminMasterPage {
     let headers = new Headers();
     headers.append('Content-Type', 'application/json');
     let options = new RequestOptions({withCredentials: true});
-    var addr = "http://localhost:8080/admin/list";
+    var addr = CONFIG.url + "/admin/list";
     this.http.get(addr, options).subscribe
     (
       (data) => //Success
