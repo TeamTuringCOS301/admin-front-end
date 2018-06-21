@@ -1,9 +1,9 @@
 import { Component, NgZone, Renderer } from '@angular/core';
 import { IonicPage, NavController, LoadingController, NavParams, ViewController } from 'ionic-angular';
 import { Geolocation } from '@ionic-native/geolocation';
-import { Http, Headers, RequestOptions} from '@angular/http';
+import { Http as AngularHttp } from '@angular/http';
 import { FormGroup, FormControl} from '@angular/forms';
-import { CONFIG } from '../../app-config';
+import { Http } from '../../http-api';
 
 /**
  * Generated class for the ConservationAreaCreatePage page.
@@ -35,7 +35,7 @@ export class ConservationAreaCreatePage {
   selectedShape: any;
   location: any;
 
-  constructor(public renderer: Renderer, public http: Http, public view: ViewController, public navParams: NavParams, public geolocation: Geolocation, public zone: NgZone, public loadingCtrl: LoadingController) {
+  constructor(public renderer: Renderer, public http: Http, public angularHttp: AngularHttp, public view: ViewController, public navParams: NavParams, public geolocation: Geolocation, public zone: NgZone, public loadingCtrl: LoadingController) {
     this.GoogleAutocomplete = new google.maps.places.AutocompleteService();
     this.autocomplete = { input: '' };
     this.autocompleteItems = [];
@@ -223,7 +223,7 @@ export class ConservationAreaCreatePage {
     this.clearMarkers();
     let url = "https://nominatim.openstreetmap.org/search/"+ this.autocomplete.input.substr(0,this.autocomplete.input.indexOf(',')) +"?format=jsonv2&polygon_geojson=1";
     console.log(url);
-    this.http.get(url).subscribe(response => {
+    this.angularHttp.get(url).subscribe(response => {
       var json = JSON.parse((<any>response)._body);
       console.log("Ouput: "+json[0]);
       let pos = { lat: parseFloat(json[0].lat), lng: parseFloat(json[0].lon) };
@@ -280,9 +280,7 @@ export class ConservationAreaCreatePage {
   }
 
   getConservationAreas(){
-    let options = new RequestOptions({withCredentials: true});
-    let addr: any = CONFIG.url + "/area/list";
-    this.http.get(addr, options).subscribe
+    this.http.get("/area/list").subscribe
     (
       function(data)
       {
@@ -296,7 +294,6 @@ export class ConservationAreaCreatePage {
   }
 
   addConservationArea(value: any){
-    let addr: any = CONFIG.url + "/area/add";
     var jsonArr = {
       "border":[],
       "name":"",
@@ -328,15 +325,10 @@ export class ConservationAreaCreatePage {
     jsonArr.province = value.province;
     jsonArr.city = value.city;
     jsonArr.admin = value.admin;
-    var param = jsonArr;
 
     //console.log(jsonArr);
 
-    let headers = new Headers();
-    headers.append('Content-Type', 'application/json');
-    let options = new RequestOptions({headers: headers, withCredentials: true});
-
-    this.http.post(addr, param, options).subscribe
+    this.http.post("/area/add", jsonArr).subscribe
     (
       function(data)
       {
