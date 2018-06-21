@@ -1,4 +1,4 @@
-#Thu Apr 19 01:32:38 SAST 2018
-base.0=/Users/tristan/Dev/admin-front-end/platforms/android/app/build/intermediates/transforms/dexMerger/debug/0
+#Thu Jun 21 11:44:19 SAST 2018
+base.0=/Users/tristan/devops/admin-front-end/platforms/android/app/build/intermediates/transforms/dexMerger/debug/0
 renamed.0=classes.dex
-file.0=/Users/tristan/Dev/admin-front-end/platforms/android/app/build/intermediates/transforms/dexMerger/debug/0/classes.dex
+file.0=/Users/tristan/devops/admin-front-end/platforms/android/app/build/intermediates/transforms/dexMerger/debug/0/classes.dex
