@@ -15,6 +15,8 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 
 import { Geolocation } from '@ionic-native/geolocation';
 
+import { Http } from '../http-api';
+
 @NgModule({
   declarations: [
     MyApp,
@@ -42,7 +44,8 @@ import { Geolocation } from '@ionic-native/geolocation';
     StatusBar,
     SplashScreen,
     Geolocation,
-    {provide: ErrorHandler, useClass: IonicErrorHandler}
+    {provide: ErrorHandler, useClass: IonicErrorHandler},
+    Http
   ]
 })
 export class AppModule {}

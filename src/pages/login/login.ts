@@ -1,9 +1,8 @@
 import { Component } from '@angular/core';
 import { NavController, ToastController } from 'ionic-angular';
-import { Http, Headers, RequestOptions} from '@angular/http';
 import { FormGroup, FormControl} from '@angular/forms';
 import { TabsPage } from '../tabs/tabs';
-import { CONFIG } from '../../app-config';
+import { Http } from '../../http-api';
 
 @Component({
   selector: 'page-login',
@@ -18,19 +17,14 @@ export class LoginPage {
 
   public loginAdmin(value: any)
   {
-    let addr: any = CONFIG.url + "/admin/login";
     var jsonArr = {
       "username":"",
       "password":""
     };
     jsonArr.username = value.user;
     jsonArr.password = value.pass;
-    var param = jsonArr;
-    let headers = new Headers();
-    headers.append('Content-Type', 'application/json');
-    let options = new RequestOptions({headers: headers/*, withCredentials: true*/});
 
-    this.http.post(addr, param, options).subscribe
+    this.http.post("/admin/login", jsonArr).subscribe
     (
       (data) =>
       {
