@@ -1,10 +1,15 @@
 page-login {
-  img {
-    height: 40vh !important;
-    width: 100% !important;
-    display: block;
-    margin: auto;
-    align-items: center;
-    object-fit: contain;;
+
+  .mobile-login{
+    background-image: url('../assets/imgs/mobile_login.png');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
   }
+
+  ion-card{
+    position: fixed;
+    bottom: 5%;
+  }
+
 }
