@@ -1,5 +1,5 @@
 import { Component, NgZone, Renderer } from '@angular/core';
-import { IonicPage, NavController, LoadingController, NavParams, ViewController } from 'ionic-angular';
+import { IonicPage, LoadingController, NavParams, ViewController } from 'ionic-angular';
 import { Geolocation } from '@ionic-native/geolocation';
 import { Http as AngularHttp } from '@angular/http';
 import { FormGroup, FormControl} from '@angular/forms';
@@ -34,6 +34,8 @@ export class ConservationAreaCreatePage {
   drawingManager: any;
   selectedShape: any;
   location: any;
+  admin:any;
+  admins:any;
 
   constructor(public renderer: Renderer, public http: Http, public angularHttp: AngularHttp, public view: ViewController, public navParams: NavParams, public geolocation: Geolocation, public zone: NgZone, public loadingCtrl: LoadingController) {
     this.GoogleAutocomplete = new google.maps.places.AutocompleteService();
@@ -53,7 +55,11 @@ export class ConservationAreaCreatePage {
 
     this.undef = false;
     this.drawingManager = null;
-    this.selectedShape = null
+    this.selectedShape = null;
+
+    this.admins = [];
+    this.admin = {};
+    this.getConservationAdmins()
   }
 
   ionViewDidLoad() {
@@ -199,12 +205,14 @@ export class ConservationAreaCreatePage {
   }
 
   tryGeolocation(){
+    //navigator.geolocation.getCurrentPosition(this.onMapSuccess,this.onMapError, { enableHighAccuracy: true });
     this.clearMarkers();
     this.geolocation.getCurrentPosition().then((resp) => {
       let pos = {
         lat: resp.coords.latitude,
         lng: resp.coords.longitude
       };
+      console.log(pos);
       let marker = new google.maps.Marker({
         position: pos,
         map: this.map,
@@ -217,7 +225,20 @@ export class ConservationAreaCreatePage {
     });
   }
 
+  /*onMapSuccess = function (position) {
 
+    this.Latitude = position.coords.latitude;
+    this.Longitude = position.coords.longitude;
+
+    let pos = {
+      lat: this.Latitude,
+      lng: this.Longitude
+    };
+  }
+
+  onMapError(error) {
+    console.log('Error getting location', error);
+  }*/
 
   getBorder(){
     this.clearMarkers();
@@ -277,6 +298,18 @@ export class ConservationAreaCreatePage {
 
       }
     });
+  }
+
+  getConservationAdmins(){
+    this.http.get("/admin/list").subscribe
+    (
+      (data) => //Success
+      {
+        var jsonResp = JSON.parse(data.text());
+        console.log(data.text());
+        this.admins = jsonResp.admins;
+      }
+    );
   }
 
   getConservationAreas(){
