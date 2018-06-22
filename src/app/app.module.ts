@@ -6,9 +6,7 @@ import { MyApp } from './app.component';
 
 import { TabsPage } from '../pages/tabs/tabs';
 import { LoginPage } from '../pages/login/login';
-import { ConservationAreaMasterPage } from '../pages/conservation-area-master/conservation-area-master';
 import { ConservationAdminMasterPage } from '../pages/conservation-admin-master/conservation-admin-master';
-import { StoreMasterPage } from '../pages/store-master/store-master';
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
@@ -22,9 +20,7 @@ import { Http } from '../http-api';
     MyApp,
     TabsPage,
     LoginPage,
-    ConservationAreaMasterPage,
     ConservationAdminMasterPage,
-    StoreMasterPage
   ],
   imports: [
     BrowserModule,
@@ -36,9 +32,7 @@ import { Http } from '../http-api';
     MyApp,
     TabsPage,
     LoginPage,
-    ConservationAreaMasterPage,
     ConservationAdminMasterPage,
-    StoreMasterPage
   ],
   providers: [
     StatusBar,

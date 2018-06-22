@@ -9,6 +9,9 @@
   <ion-navbar>
     <ion-title>Create Conservation Area</ion-title>
     <ion-buttons end>
+      <button ion-button round outline (click)="tryGeolocation()">Geo</button>
+    </ion-buttons>
+    <ion-buttons end>
         <button ion-button icon-only (click)="closeModal()"><ion-icon name="close-circle"></ion-icon></button>
     </ion-buttons>
   </ion-navbar>
@@ -64,7 +67,7 @@
           <ion-item>
             <ion-label>Conservation Admin</ion-label>
             <ion-select formControlName="admin" [(ngModel)]="admin">
-              <ion-option value="admin">Admin</ion-option>
+              <ion-option *ngFor="let admin of admins" [value]="admin.username">{{admin.username}}</ion-option>
             </ion-select>
           </ion-item>
         </ion-col>
