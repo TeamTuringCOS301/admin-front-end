@@ -9,29 +9,28 @@
   <ion-navbar>
     <ion-title>Create Conservation Area</ion-title>
     <ion-buttons end>
-      <button ion-button round outline (click)="tryGeolocation()">Geo</button>
-    </ion-buttons>
-    <ion-buttons end>
-        <button ion-button icon-only (click)="closeModal()"><ion-icon name="close-circle"></ion-icon></button>
+      <button ion-button icon-only (click)="closeModal()">
+        <ion-icon name="close-circle"></ion-icon>
+      </button>
     </ion-buttons>
   </ion-navbar>
-  <ion-toolbar color="primary">
+  <ion-toolbar color="secondary">
     <ion-grid>
       <ion-row>
-        <ion-col col-10>
-          <ion-searchbar #pacinput id="pacinput" [(ngModel)]="autocomplete.input" (ionInput)="updateSearchResults()" placeholder="Search for a place"></ion-searchbar>
+        <ion-col col-auto>
+          <ion-searchbar #pacinput id="pacinput" [(ngModel)]="autocomplete.input" (ionInput)="updateSearchResults()" placeholder="Search for a place"
+            no-padding></ion-searchbar>
         </ion-col>
         <ion-col col-2>
-          <button class="getborder-btn" ion-button round outline (click)="getBorder()" color="light" [hidden]="undef == true"> Get Border </button>
-          <button class="clear-btn" ion-button round outline (click)="deleteSelectedShape()" color="light" [hidden]="undef == false"> Clear </button>
+          <!--<button class="getborder-btn" ion-button round outline (click)="getBorder()" color="white" [hidden]="undef == true"> Get Border </button>-->
+          <button class="clear-btn" ion-button round outline (click)="deleteSelectedShape()" color="white" [hidden]="undef == false">Clear </button>
         </ion-col>
       </ion-row>
     </ion-grid>
   </ion-toolbar>
 </ion-header>
 
-
-<ion-content padding>
+<ion-content>
   <ion-list [hidden]="autocompleteItems.length == 0">
     <ion-item *ngFor="let item of autocompleteItems" tappable (click)="selectSearchResult(item, $event)">
       {{ item.description }}
@@ -39,7 +38,13 @@
 
   </ion-list>
 
-  <div #map id="map"></div>
+  <ion-fab top right edge>
+    <button ion-fab round outline (click)="getBorder()" color="tertiary" [hidden]="undef == true">Border</button>
+  </ion-fab>
+
+  <div #map id="map" no-padding>
+
+  </div>
 
 </ion-content>
 
@@ -60,18 +65,6 @@
           </ion-item>
         </ion-col>
 
-      </ion-row>
-      <ion-row>
-        <ion-col col-3></ion-col>
-        <ion-col col-6>
-          <ion-item>
-            <ion-label>Conservation Admin</ion-label>
-            <ion-select formControlName="admin" [(ngModel)]="admin">
-              <ion-option *ngFor="let admin of admins" [value]="admin.username">{{admin.username}}</ion-option>
-            </ion-select>
-          </ion-item>
-        </ion-col>
-        <ion-col col-3></ion-col>
       </ion-row>
     </ion-grid>
 

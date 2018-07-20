@@ -24,7 +24,7 @@ export class LoginPage {
     jsonArr.username = value.user;
     jsonArr.password = value.pass;
 
-    this.http.post("/admin/login", jsonArr).subscribe
+    this.http.post("/superadmin/login", jsonArr).subscribe
     (
       (data) =>
       {

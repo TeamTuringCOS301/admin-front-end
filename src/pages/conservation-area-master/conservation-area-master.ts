@@ -16,30 +16,45 @@ import { Http } from '../../http-api';
 })
 export class ConservationAreaMasterPage {
 
-  area:any;
-  areas:any;
+  area: any;
+  areas: any;
 
   constructor(public modCtrl: ModalController, public navParams: NavParams, public http: Http) {
     this.areas = [];
     this.area = {};
     this.http.get("/area/list").subscribe
-    (
+      (
       (data) => //Success
       {
         var jsonResp = JSON.parse(data.text());
-        //alert(data.text());
         this.areas = jsonResp.areas;
       }
-    );
+      );
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad ConservationAreaMasterPage');
   }
 
-  openModal(){
-    const myModal = this.modCtrl.create('ConservationAreaCreatePage');
-    myModal.present();
+  updateConservationArea() {
+    this.http.get("/area/list").subscribe
+      (
+      (data) => //Success
+      {
+        var jsonResp = JSON.parse(data.text());
+        this.areas = jsonResp.areas;
+      }
+      );
   }
 
+  openModal() {
+    const myModal = this.modCtrl.create('ConservationAreaCreatePage');
+    myModal.onDidDismiss(() => {
+      setTimeout(() => {
+        this.updateConservationArea()
+      }, 1000);
+    })
+    myModal.present();
+  }  
 }
+

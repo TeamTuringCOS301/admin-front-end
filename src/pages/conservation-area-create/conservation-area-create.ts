@@ -2,7 +2,7 @@ import { Component, NgZone, Renderer } from '@angular/core';
 import { IonicPage, LoadingController, NavParams, ViewController } from 'ionic-angular';
 import { Geolocation } from '@ionic-native/geolocation';
 import { Http as AngularHttp } from '@angular/http';
-import { FormGroup, FormControl} from '@angular/forms';
+import { FormGroup, FormControl } from '@angular/forms';
 import { Http } from '../../http-api';
 
 /**
@@ -34,8 +34,6 @@ export class ConservationAreaCreatePage {
   drawingManager: any;
   selectedShape: any;
   location: any;
-  admin:any;
-  admins:any;
 
   constructor(public renderer: Renderer, public http: Http, public angularHttp: AngularHttp, public view: ViewController, public navParams: NavParams, public geolocation: Geolocation, public zone: NgZone, public loadingCtrl: LoadingController) {
     this.GoogleAutocomplete = new google.maps.places.AutocompleteService();
@@ -51,15 +49,11 @@ export class ConservationAreaCreatePage {
     this.GooglePlaces = new google.maps.places.PlacesService(elem);
     this.loading = this.loadingCtrl.create();
 
-    this.conservationArea = new FormGroup({province: new FormControl(), city: new FormControl(), admin: new FormControl()});
+    this.conservationArea = new FormGroup({ province: new FormControl(), city: new FormControl() });
 
     this.undef = false;
     this.drawingManager = null;
     this.selectedShape = null;
-
-    this.admins = [];
-    this.admin = {};
-    this.getConservationAdmins()
   }
 
   ionViewDidLoad() {
@@ -67,7 +61,7 @@ export class ConservationAreaCreatePage {
     this.initMap();
   }
 
-  closeModal(){
+  closeModal() {
     this.view.dismiss();
   }
 
@@ -97,91 +91,90 @@ export class ConservationAreaCreatePage {
     }
   }
 
-  initMap(){
+  initMap() {
 
 
-    if(this.undef)
-    {
+    if (this.undef) {
       this.map.setCenter(this.location);
 
       var polyOptions = {
-            strokeWeight: 1.5,
-            fillOpacity: 0.2,
-            editable: true
-          };
+        strokeWeight: 1.5,
+        fillOpacity: 0.2,
+        editable: true
+      };
 
-          this.drawingManager = new google.maps.drawing.DrawingManager({
-            drawingControl: true,
-            drawingControlOptions: {
-              position: google.maps.ControlPosition.TOP_CENTER,
-              drawingModes: ['polygon']
-  			    },
-            markerOptions: {
-              draggable: true
-            },
-            polylineOptions: {
-              editable: true
-            },
-            polygonOptions: polyOptions,
-            map: this.map
+      this.drawingManager = new google.maps.drawing.DrawingManager({
+        drawingControl: true,
+        drawingControlOptions: {
+          position: google.maps.ControlPosition.TOP_CENTER,
+          drawingModes: ['polygon']
+        },
+        markerOptions: {
+          draggable: true
+        },
+        polylineOptions: {
+          editable: true
+        },
+        polygonOptions: polyOptions,
+        map: this.map
+      });
+
+
+
+      google.maps.event.addListener(this.drawingManager, 'overlaycomplete', e => {
+        if (e.type != google.maps.drawing.OverlayType.MARKER) {
+          this.drawingManager.setDrawingMode(null);
+          this.drawingManager.setOptions({
+            drawingControl: false
           });
 
-
-
-          google.maps.event.addListener(this.drawingManager, 'overlaycomplete', e => {
-              if (e.type != google.maps.drawing.OverlayType.MARKER) {
-              this.drawingManager.setDrawingMode(null);
-              this.drawingManager.setOptions({
-                drawingControl: false
-              });
-
-              var newShape = e.overlay;
-              newShape.type = e.type;
-              google.maps.event.addListener(newShape, 'click', function() {
-                this.setSelection(newShape);
-              });
-              this.setSelection(newShape);
-            }
+          var newShape = e.overlay;
+          newShape.type = e.type;
+          google.maps.event.addListener(newShape, 'click', function () {
+            this.setSelection(newShape);
           });
+          this.setSelection(newShape);
+        }
+      });
 
-  		google.maps.event.addListener(this.drawingManager, 'drawingmode_changed', this.clearSelection);
-          google.maps.event.addListener(this.map, 'click', this.clearSelection);
-          //google.maps.event.addDomListener(document.getElementById('delete-button'), 'click', this.deleteSelectedShape);
-  		//google.maps.event.addDomListener(document.getElementById('confirm-selection'), 'click', this.confirm);
+      google.maps.event.addListener(this.drawingManager, 'drawingmode_changed', this.clearSelection);
+      google.maps.event.addListener(this.map, 'click', this.clearSelection);
+      //google.maps.event.addDomListener(document.getElementById('delete-button'), 'click', this.deleteSelectedShape);
+      //google.maps.event.addDomListener(document.getElementById('confirm-selection'), 'click', this.confirm);
 
-          this.drawingManager.setMap(this.map);
+      this.drawingManager.setMap(this.map);
     }
-    else{
+    else {
       this.map = new google.maps.Map(document.getElementById('map'), {
-  		    center: { lat: 0.0, lng: 0.0 },
-  		      zoom: 12
+        center: { lat: 0.0, lng: 0.0 },
+        zoom: 12
       });
       this.tryGeolocation();
     }
   }
 
-  updateSearchResults(){
-  if (this.autocomplete.input == '') {
-    this.autocompleteItems = [];
-    return;
-  }
-  this.GoogleAutocomplete.getPlacePredictions({ input: this.autocomplete.input },
-	(predictions, status) => {
-    this.autocompleteItems = [];
-      this.zone.run(() => {
-        predictions.forEach((prediction) => {
-          this.autocompleteItems.push(prediction);
+  updateSearchResults() {
+    if (this.autocomplete.input == '') {
+      this.autocompleteItems = [];
+      return;
+    }
+    this.GoogleAutocomplete.getPlacePredictions({ input: this.autocomplete.input },
+      (predictions, status) => {
+        this.autocompleteItems = [];
+        this.zone.run(() => {
+          predictions.forEach((prediction) => {
+            this.autocompleteItems.push(prediction);
+          });
         });
       });
-    });
   }
 
-  selectSearchResult(item, event){
+  selectSearchResult(item, event) {
     this.clearMarkers();
     this.autocompleteItems = [];
 
-    this.geocoder.geocode({'placeId': item.place_id}, (results, status) => {
-      if(status === 'OK' && results[0]){
+    this.geocoder.geocode({ 'placeId': item.place_id }, (results, status) => {
+      if (status === 'OK' && results[0]) {
 
         this.autocomplete.input = item.description;
         let marker = new google.maps.Marker({
@@ -196,7 +189,7 @@ export class ConservationAreaCreatePage {
     });
   }
 
-  clearMarkers(){
+  clearMarkers() {
     for (var i = 0; i < this.markers.length; i++) {
       console.log(this.markers[i])
       this.markers[i].setMap(null);
@@ -204,7 +197,7 @@ export class ConservationAreaCreatePage {
     this.markers = [];
   }
 
-  tryGeolocation(){
+  tryGeolocation() {
     //navigator.geolocation.getCurrentPosition(this.onMapSuccess,this.onMapError, { enableHighAccuracy: true });
     this.clearMarkers();
     this.geolocation.getCurrentPosition().then((resp) => {
@@ -225,41 +218,27 @@ export class ConservationAreaCreatePage {
     });
   }
 
-  /*onMapSuccess = function (position) {
-
-    this.Latitude = position.coords.latitude;
-    this.Longitude = position.coords.longitude;
-
-    let pos = {
-      lat: this.Latitude,
-      lng: this.Longitude
-    };
-  }
-
-  onMapError(error) {
-    console.log('Error getting location', error);
-  }*/
-
-  getBorder(){
+  getBorder() {
     this.clearMarkers();
-    let url = "https://nominatim.openstreetmap.org/search/"+ this.autocomplete.input.substr(0,this.autocomplete.input.indexOf(',')) +"?format=jsonv2&polygon_geojson=1";
+    let url = "https://nominatim.openstreetmap.org/search/" + this.autocomplete.input.substr(0, this.autocomplete.input.indexOf(',')) + "?format=jsonv2&polygon_geojson=1";
     console.log(url);
     this.angularHttp.get(url).subscribe(response => {
       var json = JSON.parse((<any>response)._body);
-      console.log("Ouput: "+json[0]);
-      let pos = { lat: parseFloat(json[0].lat), lng: parseFloat(json[0].lon) };
-      this.map.setCenter(pos);
+      //alert("Ouput: " + json);
 
-      if(typeof json[0].geojson.coordinates[0].length == "undefined")
-      {
-        this.undef = true;
-        this.initMap();
-      }
-      else{
-          console.log("Displaying coords: "+json[0].geojson.coordinates[0].length);
-          if(json[0].geojson.coordinates[0].length!=1){
-            var coords=new Array();
-            var singleCoord = { lat: 0.0, lng: 0.0};
+      if (json.length > 0) {
+        if (typeof json[0].geojson.coordinates[0].length == "undefined") {
+          this.undef = true;
+          this.initMap();
+        }
+        else {
+          let pos = { lat: parseFloat(json[0].lat), lng: parseFloat(json[0].lon) };
+          this.map.setCenter(pos);
+
+          console.log("Displaying coords: " + json[0].geojson.coordinates[0].length);
+          if (json[0].geojson.coordinates[0].length != 1) {
+            var coords = new Array();
+            var singleCoord = { lat: 0.0, lng: 0.0 };
             //var singleCoord=new Array();
             var x;
             for (x in json[0].geojson.coordinates[0]) {
@@ -267,111 +246,85 @@ export class ConservationAreaCreatePage {
               singleCoord.lng = json[0].geojson.coordinates[0][x][0];
               coords.push(singleCoord);
               singleCoord = null;
-              singleCoord = { lat: 0.0, lng: 0.0}
+              singleCoord = { lat: 0.0, lng: 0.0 }
             }
-        }
-        else{
-          coords=new Array();
-          singleCoord = { lat: 0.0, lng: 0.0};
-          for (x in json[0].geojson.coordinates[0][0]) {
-            singleCoord.lat = json[0].geojson.coordinates[0][0][x][1];
-            singleCoord.lng = json[0].geojson.coordinates[0][0][x][0];
-            coords.push(singleCoord);
-            singleCoord = null;
-            singleCoord = { lat: 0.0, lng: 0.0}
           }
-        }
+          else {
+            coords = new Array();
+            singleCoord = { lat: 0.0, lng: 0.0 };
+            for (x in json[0].geojson.coordinates[0][0]) {
+              singleCoord.lat = json[0].geojson.coordinates[0][0][x][1];
+              singleCoord.lng = json[0].geojson.coordinates[0][0][x][0];
+              coords.push(singleCoord);
+              singleCoord = null;
+              singleCoord = { lat: 0.0, lng: 0.0 }
+            }
+          }
           this.border = coords;
 
           console.log(coords);
 
           var polygon = new google.maps.Polygon({
-              paths: coords,
-              strokeColor: '#00FFFF',
-              strokeOpacity: 0.8,
-              strokeWeight: 2,
-              fillColor: '#0000FF',
-              fillOpacity: 0.35,
-              editable: true
-            });
+            paths: coords,
+            strokeColor: '#0000FF',
+            strokeOpacity: 0.8,
+            strokeWeight: 2,
+            fillColor: '#0000FF',
+            fillOpacity: 0.35,
+            editable: true
+          });
           polygon.setMap(this.map);
 
+        }
+      } else {
+        this.undef = true;
+        this.initMap();
       }
     });
   }
 
-  getConservationAdmins(){
-    this.http.get("/admin/list").subscribe
-    (
-      (data) => //Success
-      {
-        var jsonResp = JSON.parse(data.text());
-        console.log(data.text());
-        this.admins = jsonResp.admins;
-      }
-    );
-  }
-
-  getConservationAreas(){
-    this.http.get("/area/list").subscribe
-    (
-      function(data)
-      {
-        alert("Success: " + data.text());
-      },
-      function(error)
-      {
-        alert("Error: " + error);
-      }
-    );
-  }
-
-  addConservationArea(value: any){
+  addConservationArea(value: any) {
     var jsonArr = {
-      "border":[],
-      "name":"",
-      "province":"",
-      "city":"",
-      "admin":"" 
+      "border": [],
+      "name": "",
+      "province": "",
+      "city": "",
     };
-    if(this.undef)
-    {
+    if (this.undef) {
       var final = [];
-      var singleCoord = { lat: 0.0, lng: 0.0};
+      var singleCoord = { lat: 0.0, lng: 0.0 };
       var vertices = this.selectedShape.getPath();
-      for (var i =0; i < vertices.getLength(); i++) {
-          var xy = vertices.getAt(i);
-          singleCoord.lat = xy.lat();
-          singleCoord.lng = xy.lng();
-          final.push(singleCoord);
-          singleCoord = null;
-          singleCoord = { lat: 0.0, lng: 0.0}
+      for (var i = 0; i < vertices.getLength(); i++) {
+        var xy = vertices.getAt(i);
+        singleCoord.lat = xy.lat();
+        singleCoord.lng = xy.lng();
+        final.push(singleCoord);
+        singleCoord = null;
+        singleCoord = { lat: 0.0, lng: 0.0 }
       }
-      alert(final);
+      //alert(final);
       jsonArr.border = final;
     }
-    else
-    {
+    else {
       jsonArr.border = this.border;
     }
-    jsonArr.name = this.autocomplete.input.substr(0,this.autocomplete.input.indexOf(','));
+    jsonArr.name = this.autocomplete.input.substr(0, this.autocomplete.input.indexOf(','));
     jsonArr.province = value.province;
     jsonArr.city = value.city;
-    jsonArr.admin = value.admin;
 
-    //console.log(jsonArr);
 
     this.http.post("/area/add", jsonArr).subscribe
-    (
-      function(data)
-      {
-        alert("Success: " + data.text());
+      (
+      data => {
+        //alert("Success: " + data.text());
+        
       },
-      function(error)
-      {
-        alert("Error: " + error);
+      error => {
+        //alert("Error: " + error);
       }
-    );
+      );
+
+    this.view.dismiss();
   }
 
 }
