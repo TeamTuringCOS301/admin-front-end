@@ -9,7 +9,9 @@
   <ion-navbar>
     <ion-title>Create Conservation Admin</ion-title>
     <ion-buttons end>
-      <button ion-button icon-only (click)="closeModal()"><ion-icon name="close-circle"></ion-icon></button>
+      <button ion-button icon-only (click)="closeModal()">
+        <ion-icon name="close-circle"></ion-icon>
+      </button>
     </ion-buttons>
   </ion-navbar>
 
@@ -19,53 +21,49 @@
 <ion-content padding>
   <form (submit)="addConservationAdmin(conservationAdmin.value)" [formGroup]="conservationAdmin">
     <ion-list>
+      <ion-grid>
+        <ion-row>
+          <ion-col col-12 col-sm-9 col-md-6 col-lg-4>
+            <ion-item>
+              <ion-label></ion-label>
+              <ion-input formControlName="username" type="text" placeholder="Username"></ion-input>
+            </ion-item>
+          </ion-col>
+          <ion-col col-12 col-sm-9 col-md-6 col-lg-4>
+            <ion-item>
+              <ion-label></ion-label>
+              <ion-input formControlName="email" type="email" placeholder="Email"></ion-input>
+            </ion-item>
+          </ion-col>
+          <ion-col col-12 col-sm-9 col-md-6 col-lg-4>
+            <ion-item>
+              <ion-label></ion-label>
+              <ion-input formControlName="fname" type="text" placeholder="Name"></ion-input>
+            </ion-item>
+          </ion-col>
+          <ion-col col-12 col-sm-9 col-md-6 col-lg-4>
+            <ion-item>
+              <ion-label></ion-label>
+              <ion-input formControlName="sname" type="text" placeholder="Surname"></ion-input>
+            </ion-item>
+          </ion-col>
+          <ion-col col-12 col-sm-9 col-md-6 col-lg-4>
+            <ion-item>
+              <ion-label>Conservation Areas</ion-label>
+              <ion-select formControlName="carea" *ngFor="let area of areas">
+                <ion-option value="{{area.id}}">{{area.name}}</ion-option>
+              </ion-select>
+            </ion-item>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-list>
     <ion-grid>
       <ion-row>
-        <ion-col col-3></ion-col>
-        <ion-col col-6>
-
-          <ion-item>
-            <ion-label floating>Username</ion-label>
-            <ion-input formControlName="username" type="text"></ion-input>
-          </ion-item>
-
-        </ion-col>
-        <ion-col col-3></ion-col>
+        <button ion-button type="submit" outline round>Add</button>
       </ion-row>
+    </ion-grid>
 
-      <ion-row>
-        <ion-col col-3></ion-col>
-        <ion-col col-6>
-          <ion-item>
-            <ion-label floating>Email</ion-label>
-            <ion-input formControlName="email" type="email"></ion-input>
-          </ion-item>
-        </ion-col>
-        <ion-col col-3></ion-col>
-      </ion-row>
-
-      <ion-row>
-          <ion-col col-6>
-            <ion-item>
-              <ion-label floating>Name</ion-label>
-              <ion-input formControlName="fname" type="text"></ion-input>
-            </ion-item>
-          </ion-col>
-          <ion-col col-6>
-            <ion-item>
-              <ion-label floating>Surname</ion-label>
-              <ion-input formControlName="sname" type="text"></ion-input>
-            </ion-item>
-          </ion-col>
-      </ion-row>
-      </ion-grid>
-      </ion-list>
-      <ion-grid>
-          <ion-row>
-              <button ion-button type="submit" outline round >Add</button>
-            </ion-row>
-      </ion-grid>
-      
 
   </form>
 </ion-content>

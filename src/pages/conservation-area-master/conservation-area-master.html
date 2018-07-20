@@ -22,18 +22,19 @@
   <ion-list>
     <ion-grid>
       <ion-row>
-        <ion-col col-1></ion-col>
-        <ion-col col-10>
-          <ion-card *ngFor="let area of areas" color="primary">
-            <ion-card-header>
+        <ion-col class="area-card" *ngFor="let area of areas" col-12 col-sm-9 col-md-6 col-lg-4>
+          <ion-card>
+            <!--<img src="https://maps.googleapis.com/maps/api/staticmap?center={{area.name}}&zoom=14&scale=1&size=600x300&maptype=roadmap&format=png&visual_refresh=true">-->
+            <!--<img src="https://maps.googleapis.com/maps/api/staticmap?center={{area.name}}&zoom=13&size=600x300&maptype=roadmap&markers=color:blue%7Clabel:S%7C40.702147,-74.015794&markers=color:green%7Clabel:G%7C40.711614,-74.012318&markers=color:red%7Clabel:C%7C40.718217,-73.998284">-->
+            <ion-card-header color="white">
               {{area.name}}
             </ion-card-header>
             <ion-card-content>
-              <p>Province: {{area.province}}, City: {{area.city}}</p>
+              <p>Province: {{area.province}}</p>
+              <p>City: {{area.city}}</p>
             </ion-card-content>
           </ion-card>
         </ion-col>
-        <ion-col col-1></ion-col>
       </ion-row>
     </ion-grid>
   </ion-list>
