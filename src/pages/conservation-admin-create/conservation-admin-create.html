@@ -50,7 +50,7 @@
           <ion-col col-12 col-sm-9 col-md-6 col-lg-4>
             <ion-item>
               <ion-label>Conservation Areas</ion-label>
-              <ion-select formControlName="carea" *ngFor="let area of areas">
+              <ion-select *ngFor="let area of areas" formControlName="carea">
                 <ion-option value="{{area.id}}">{{area.name}}</ion-option>
               </ion-select>
             </ion-item>
