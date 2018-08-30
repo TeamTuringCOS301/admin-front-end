@@ -28,10 +28,8 @@ export class ConservationAdminCreatePage {
     (
       (data) => //Success
       {
-        console.log(data);
         var jsonResp = JSON.parse(data.text());
         this.areas = jsonResp.areas;
-        console.log(this.areas);
       }
     );
   }

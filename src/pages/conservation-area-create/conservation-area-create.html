@@ -14,10 +14,9 @@
       </button>
     </ion-buttons>
   </ion-navbar>
-  <ion-toolbar color="secondary">
-    <ion-grid>
+    <ion-grid id="toolbar">
       <ion-row>
-        <ion-col col-auto>
+        <ion-col col-8>
           <ion-searchbar #pacinput id="pacinput" [(ngModel)]="autocomplete.input" (ionInput)="updateSearchResults()" placeholder="Search for a place"
             no-padding></ion-searchbar>
         </ion-col>
@@ -27,7 +26,6 @@
         </ion-col>
       </ion-row>
     </ion-grid>
-  </ion-toolbar>
 </ion-header>
 
 <ion-content>
