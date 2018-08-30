@@ -1,3 +1,18 @@
 page-store-master {
+    
+    .card-ios p {
+        color: color($colors, white);
+    }
 
+    .card-md p {
+        color: color($colors, white);
+    }
+
+    .store-card .card-ios {
+        background: linear-gradient(90deg, color($colors, primary) 0%, color($colors, secondary) 40%, color($colors, tertiary) 100%);
+    }
+
+    .store-card .card-md {
+        background: linear-gradient(90deg, color($colors, primary) 0%, color($colors, secondary) 40%, color($colors, tertiary) 100%);
+    }
 }

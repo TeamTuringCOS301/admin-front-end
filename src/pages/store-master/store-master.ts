@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, AlertController } from 'ionic-angular';
 import { Http } from '../../http-api';
+import { CONFIG } from '../../app-config';
 
 /**
  * Generated class for the StoreMasterPage page.
@@ -26,8 +27,10 @@ export class StoreMasterPage {
       (data) => //Success
       {
         var jsonResp = JSON.parse(data.text());
-        console.log(jsonResp);
         this.verifiedRewards = jsonResp.rewards;
+        this.verifiedRewards.forEach(element => {
+          element.url = CONFIG.url + "/reward/image/" + element.id;
+        });
       },
       (error) =>
       {
@@ -40,8 +43,10 @@ export class StoreMasterPage {
       (data) => //Success
       {
         var jsonResp = JSON.parse(data.text());
-        console.log(jsonResp);
         this.newRewards = jsonResp.rewards;
+        this.newRewards.forEach(element => {
+          element.url = CONFIG.url + "/reward/image/" + element.id;
+        });
       },
       (error) =>
       {
@@ -99,7 +104,6 @@ export class StoreMasterPage {
       (data) => //Success
       {
         var jsonResp = JSON.parse(data.text());
-        alert(jsonResp);
       },
       (error) =>
       {
