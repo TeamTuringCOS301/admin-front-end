@@ -14,19 +14,48 @@
 
 
 <ion-content>
-    <ion-grid>
+  <ion-list>
+    <ion-list-header>
+      <h1>Unverified Rewards</h1>
+    </ion-list-header>
+
+      <ion-grid>
         <ion-row>
-          <ion-col col-12 col-sm-9 col-md-6 col-lg-4>
-            <ion-card *ngFor="let reward of rewards">
+          <ion-col class="store-card" col-12 col-sm-9 col-md-6 col-lg-4 *ngFor="let new of newRewards">
+            <ion-card>
               <ion-card-header>
-                <b>{{reward.name}}</b>
+                <b>{{new.name}}</b>
               </ion-card-header>
               <ion-card-content>
-                <p>Conservation Area: {{reward.area}}</p>
-                <p> Cost: {{reward.coinValue}}</p>
+                  <img src="{{new.url}}" alt="">
+                <p text-wrap> Cost: R {{new.randValue}}</p>
+                <p text-wrap> Area: {{new.areaName}}</p>
+                <button ion-button round (click)='showPrompt(new.id)' color="safe">Verify</button>
               </ion-card-content>
             </ion-card>
           </ion-col>
         </ion-row>
       </ion-grid>
+    <ion-list-header>
+      <h1>Verified Rewards</h1>
+    </ion-list-header>
+
+      <ion-grid>
+        <ion-row>
+          <ion-col class="store-card" col-12 col-sm-9 col-md-6 col-lg-4 *ngFor="let veri of verifiedRewards">
+            <ion-card>
+              <ion-card-header>
+                <b>{{veri.name}}</b>
+              </ion-card-header>
+              <ion-card-content>
+                <img src="{{veri.url}}" alt="">
+                <p text-wrap> Cost: R {{veri.randValue}}</p>
+                <p text-wrap> Area: {{veri.areaName}}</p>
+                <button ion-button round (click)='unverifyReward(veri.id)' color="danger">Unverify</button>
+              </ion-card-content>
+            </ion-card>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+  </ion-list>
 </ion-content>

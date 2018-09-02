@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, AlertController } from 'ionic-angular';
 import { Http } from '../../http-api';
+import { CONFIG } from '../../app-config';
 
 /**
  * Generated class for the StoreMasterPage page.
@@ -16,15 +17,36 @@ import { Http } from '../../http-api';
 })
 export class StoreMasterPage {
 
-  rewards : any;
-  constructor(public navCtrl: NavController, public navParams: NavParams, public http: Http) {
+  verifiedRewards : any;
+  verifiedAreas: any;
+  newRewards : any;
+  newAreas : any;
+  constructor(public navCtrl: NavController, public navParams: NavParams, public http: Http, public alertCtrl: AlertController) {
     this.http.get("/reward/list").subscribe
     (
       (data) => //Success
       {
         var jsonResp = JSON.parse(data.text());
-        console.log(jsonResp);
-        this.rewards = jsonResp.rewards;
+        this.verifiedRewards = jsonResp.rewards;
+        this.verifiedRewards.forEach(element => {
+          element.url = CONFIG.url + "/reward/image/" + element.id;
+        });
+      },
+      (error) =>
+      {
+        alert(error);
+      }
+    );
+
+    this.http.get("/reward/list/new").subscribe
+    (
+      (data) => //Success
+      {
+        var jsonResp = JSON.parse(data.text());
+        this.newRewards = jsonResp.rewards;
+        this.newRewards.forEach(element => {
+          element.url = CONFIG.url + "/reward/image/" + element.id;
+        });
       },
       (error) =>
       {
@@ -33,18 +55,6 @@ export class StoreMasterPage {
     );
   }
 
-  /*picked(id)
-  {
-    var reward = {};
-    this.rewards.forEach((reward) =>
-    {
-      if(reward.id == id)
-      {
-        var modalPage = this.modalCtrl.create(ViewReward, {reward:reward}); modalPage.present();
-      }
-    });
-  }*/
-
   navPop()
   {
     this.navCtrl.pop();
@@ -52,6 +62,54 @@ export class StoreMasterPage {
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad StoreMasterPage');
+  }
+
+  showPrompt(id: any) {
+    const prompt = this.alertCtrl.create({
+      title: 'Verify',
+      message: "Enter a coin value for this reward to verify it.",
+      inputs: [
+        {
+          name: 'value',
+          placeholder: ''
+        },
+      ],
+      buttons: [
+        {
+          text: 'Cancel',
+          handler: data => {
+            console.log('Cancel clicked');
+          }
+        },
+        {
+          text: 'Verify',
+          handler: data => {
+            this.verifyReward(id, data.value);
+          }
+        }
+      ]
+    });
+    prompt.present();
+  }
+
+  verifyReward(id : any, value: any) {
+    var jsonArr = {
+      "coinValue": 0,
+    };
+
+    jsonArr.coinValue = parseInt(value);
+
+    this.http.post("/reward/verify/" + id, jsonArr).subscribe
+    (
+      (data) => //Success
+      {
+        var jsonResp = JSON.parse(data.text());
+      },
+      (error) =>
+      {
+        alert(error);
+      }
+    );
   }
 
 }

@@ -6,8 +6,6 @@ import { MyApp } from './app.component';
 
 import { TabsPage } from '../pages/tabs/tabs';
 import { LoginPage } from '../pages/login/login';
-import { ConservationAdminMasterPage } from '../pages/conservation-admin-master/conservation-admin-master';
-
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 
@@ -20,7 +18,6 @@ import { Http } from '../http-api';
     MyApp,
     TabsPage,
     LoginPage,
-    ConservationAdminMasterPage,
   ],
   imports: [
     BrowserModule,
@@ -32,7 +29,6 @@ import { Http } from '../http-api';
     MyApp,
     TabsPage,
     LoginPage,
-    ConservationAdminMasterPage,
   ],
   providers: [
     StatusBar,

@@ -106,7 +106,7 @@ export class ConservationAreaCreatePage {
       this.drawingManager = new google.maps.drawing.DrawingManager({
         drawingControl: true,
         drawingControlOptions: {
-          position: google.maps.ControlPosition.TOP_CENTER,
+          position: google.maps.ControlPosition.RIGHT_BOTTOM,
           drawingModes: ['polygon']
         },
         markerOptions: {
@@ -139,15 +139,19 @@ export class ConservationAreaCreatePage {
 
       google.maps.event.addListener(this.drawingManager, 'drawingmode_changed', this.clearSelection);
       google.maps.event.addListener(this.map, 'click', this.clearSelection);
-      //google.maps.event.addDomListener(document.getElementById('delete-button'), 'click', this.deleteSelectedShape);
-      //google.maps.event.addDomListener(document.getElementById('confirm-selection'), 'click', this.confirm);
-
       this.drawingManager.setMap(this.map);
     }
     else {
       this.map = new google.maps.Map(document.getElementById('map'), {
         center: { lat: 0.0, lng: 0.0 },
-        zoom: 12
+        zoom: 12,
+        zoomControl: false,
+        mapTypeControl: false,
+        scaleControl: false,
+        streetViewControl: false,
+        rotateControl: false,
+        fullscreenControl: true
+
       });
       this.tryGeolocation();
     }
@@ -224,7 +228,6 @@ export class ConservationAreaCreatePage {
     console.log(url);
     this.angularHttp.get(url).subscribe(response => {
       var json = JSON.parse((<any>response)._body);
-      //alert("Ouput: " + json);
 
       if (json.length > 0) {
         if (typeof json[0].geojson.coordinates[0].length == "undefined") {
@@ -261,8 +264,6 @@ export class ConservationAreaCreatePage {
             }
           }
           this.border = coords;
-
-          console.log(coords);
 
           var polygon = new google.maps.Polygon({
             paths: coords,
@@ -317,7 +318,7 @@ export class ConservationAreaCreatePage {
       (
       data => {
         //alert("Success: " + data.text());
-        
+
       },
       error => {
         //alert("Error: " + error);

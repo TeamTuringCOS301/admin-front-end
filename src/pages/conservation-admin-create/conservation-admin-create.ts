@@ -28,9 +28,7 @@ export class ConservationAdminCreatePage {
     (
       (data) => //Success
       {
-        console.log(data);
         var jsonResp = JSON.parse(data.text());
-        //alert(data.text());
         this.areas = jsonResp.areas;
       }
     );
@@ -50,14 +48,14 @@ export class ConservationAdminCreatePage {
       "email":"",
       "name":"",
       "surname":"",
-      "area":""
+      "area":0
     };
 
     jsonArr.username = value.username;
     jsonArr.email = value.email;
     jsonArr.name = value.fname;
     jsonArr.surname = value.sname;
-    jsonArr.area = value.carea;
+    jsonArr.area = parseInt(value.carea);
 
     this.http.post("/admin/add", jsonArr).subscribe
     (
