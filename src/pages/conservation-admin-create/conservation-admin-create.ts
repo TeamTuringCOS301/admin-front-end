@@ -61,11 +61,11 @@ export class ConservationAdminCreatePage {
     (
       function(data)
       {
-        alert("Success: " + data.text());
+        //alert("Success: " + data.text());
       },
       function(error)
       {
-        alert("Error: " + error);
+        //alert("Error: " + error);
       }
     );
 

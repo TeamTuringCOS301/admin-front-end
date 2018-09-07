@@ -34,9 +34,9 @@ $app-direction: ltr;
 // The "primary" color is the only required color in the map.
 
 $colors: (
-  primary:    #1a6dff,
-  secondary:  #7148ff,
-  tertiary:   #c822ff,
+  primary:    #B721FF/*#1a6dff*/,
+  secondary:  #6c7bfe,
+  tertiary:   #21D4FD/*#c822ff*/,
   danger:     #ff3b30,
   orange:     #ff9500,
   yellow:     #ffcc00,
@@ -56,6 +56,8 @@ $colors: (
 $text-input-ios-show-focus-highlight: true;
 $text-input-ios-highlight-color: color($colors, tertiary);
 $card-ios-border-radius: 15px;
+$card-ios-box-shadow: 0 5px 5px 0 rgba(0, 0, 0, .4);
+$toolbar-ios-title-text-color: color($colors, white);
 
 
 // App Material Design Variables
@@ -63,6 +65,8 @@ $card-ios-border-radius: 15px;
 // Material Design only Sass variables can go here
 $text-input-md-highlight-color: color($colors, tertiary);
 $card-md-border-radius: 15px;
+$card-md-box-shadow: 0 5px 5px 0 rgba(0, 0, 0, .4);
+$toolbar-md-title-text-color: color($colors, white);
 
 // App Windows Variables
 // --------------------------------------------------

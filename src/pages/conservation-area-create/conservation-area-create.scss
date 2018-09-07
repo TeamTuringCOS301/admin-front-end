@@ -7,4 +7,15 @@ page-conservation-area-create {
   #toolbar {
     position: absolute;
   }
+
+  @media screen and (min-width:900px){
+    .modal-wrapper {
+      height: 90%;
+      margin: 30px;
+      position: absolute;
+        top: 0;
+        left: 10%;
+        width: 80%;
+    }
+  }
 }

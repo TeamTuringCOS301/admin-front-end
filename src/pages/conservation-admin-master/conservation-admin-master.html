@@ -2,7 +2,8 @@
   <ion-navbar>
     <ion-title>Conservation Admins</ion-title>
     <ion-buttons end>
-      <button ion-button icon-only (click)='openModal()'>
+      <button ion-button round outline (click)='openModal()'>
+        Add
         <ion-icon name="add"></ion-icon>
       </button>
     </ion-buttons>
@@ -11,11 +12,16 @@
 
 <ion-content padding>
   <ion-list>
-    <ion-grid>
+    <ion-item *ngFor="let admin of admins">
+        <h1>{{admin.username}}</h1>
+        <p>{{admin.name}} {{admin.surname}}</p>
+        <p><u>{{admin.email}}</u></p>
+    </ion-item>
+    <!--<ion-grid>
       <ion-row>
         <ion-col class="admin-card" *ngFor="let admin of admins" col-12 col-sm-9 col-md-6 col-lg-4>
           <ion-card>
-            <ion-card-header color="light">
+            <ion-card-header>
               {{admin.username}}
             </ion-card-header>
             <ion-card-content>
@@ -24,6 +30,6 @@
           </ion-card>
         </ion-col>
       </ion-row>
-    </ion-grid>
+    </ion-grid>-->
   </ion-list>
 </ion-content>
