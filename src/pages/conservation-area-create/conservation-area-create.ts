@@ -49,7 +49,7 @@ export class ConservationAreaCreatePage {
     this.GooglePlaces = new google.maps.places.PlacesService(elem);
     this.loading = this.loadingCtrl.create();
 
-    this.conservationArea = new FormGroup({ province: new FormControl(), city: new FormControl() });
+    this.conservationArea = new FormGroup({ areaName: new FormControl() ,province: new FormControl(), city: new FormControl() });
 
     this.undef = false;
     this.drawingManager = null;
@@ -309,7 +309,7 @@ export class ConservationAreaCreatePage {
     else {
       jsonArr.border = this.border;
     }
-    jsonArr.name = this.autocomplete.input.substr(0, this.autocomplete.input.indexOf(','));
+    jsonArr.name = value.areaName;
     jsonArr.province = value.province;
     jsonArr.city = value.city;
 

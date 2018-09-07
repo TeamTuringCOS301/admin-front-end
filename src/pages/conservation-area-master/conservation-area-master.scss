@@ -1,19 +1,10 @@
 page-conservation-area-master {
 
-    .card-ios p {
-        color: color($colors, white);
+    .card-ios p .province{
+        color: color($colors, primary);
     }
 
-    .card-md p {
-        color: color($colors, white);
+    .province{
+        color: color($colors, primary);
     }
-
-    .area-card .card-ios {
-        background: linear-gradient(90deg, color($colors, primary) 0%, color($colors, secondary) 40%, color($colors, tertiary) 100%);
-    }
-
-    .area-card .card-md {
-        background: linear-gradient(90deg, color($colors, primary) 0%, color($colors, secondary) 40%, color($colors, tertiary) 100%);
-    }
-
 }

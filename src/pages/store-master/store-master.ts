@@ -17,13 +17,18 @@ import { CONFIG } from '../../app-config';
 })
 export class StoreMasterPage {
 
-  verifiedRewards : any;
-  verifiedAreas: any;
-  newRewards : any;
-  newAreas : any;
+  verifiedRewards: any;
+  newRewards: any;
+  allNewRewards: any;
+  allVeriRewards: any;
+  reward: any;
   constructor(public navCtrl: NavController, public navParams: NavParams, public http: Http, public alertCtrl: AlertController) {
+    this.allNewRewards = [];
+    this.allVeriRewards = [];
+    this.reward = {};
+    
     this.http.get("/reward/list").subscribe
-    (
+      (
       (data) => //Success
       {
         var jsonResp = JSON.parse(data.text());
@@ -31,15 +36,19 @@ export class StoreMasterPage {
         this.verifiedRewards.forEach(element => {
           element.url = CONFIG.url + "/reward/image/" + element.id;
         });
+
+        this.allVeriRewards = jsonResp.rewards;
+        this.allVeriRewards.forEach(element => {
+          element.url = CONFIG.url + "/reward/image/" + element.id;
+        });
       },
-      (error) =>
-      {
+      (error) => {
         alert(error);
       }
-    );
+      );
 
     this.http.get("/reward/list/new").subscribe
-    (
+      (
       (data) => //Success
       {
         var jsonResp = JSON.parse(data.text());
@@ -47,16 +56,19 @@ export class StoreMasterPage {
         this.newRewards.forEach(element => {
           element.url = CONFIG.url + "/reward/image/" + element.id;
         });
+
+        this.allNewRewards = jsonResp.rewards;
+        this.allNewRewards.forEach(element => {
+          element.url = CONFIG.url + "/reward/image/" + element.id;
+        });
       },
-      (error) =>
-      {
+      (error) => {
         alert(error);
       }
-    );
+      );
   }
 
-  navPop()
-  {
+  navPop() {
     this.navCtrl.pop();
   }
 
@@ -92,7 +104,7 @@ export class StoreMasterPage {
     prompt.present();
   }
 
-  verifyReward(id : any, value: any) {
+  verifyReward(id: any, value: any) {
     var jsonArr = {
       "coinValue": 0,
     };
@@ -100,16 +112,52 @@ export class StoreMasterPage {
     jsonArr.coinValue = parseInt(value);
 
     this.http.post("/reward/verify/" + id, jsonArr).subscribe
-    (
+      (
       (data) => //Success
       {
         var jsonResp = JSON.parse(data.text());
       },
-      (error) =>
-      {
+      (error) => {
         alert(error);
       }
-    );
+      );
+  }
+
+  onSearchInput(data) {
+    this.newRewards = [];
+    var searched = data.target.value;
+    if (searched && searched.trim() != '') {
+      this.reward = this.allNewRewards.filter((item) => {
+        var lowName = item.areaName.toLowerCase();
+        var lowSearch = searched.toLowerCase();
+        if (lowName.indexOf(lowSearch) >= 0) {
+          this.newRewards.push(item);
+        }
+      })
+    }
+    else {
+      this.newRewards = this.allNewRewards;
+    }
+
+    this.verifiedRewards = [];
+    var searched = data.target.value;
+    if (searched && searched.trim() != '') {
+      this.reward = this.allVeriRewards.filter((item) => {
+        var lowName = item.areaName.toLowerCase();
+        var lowSearch = searched.toLowerCase();
+        if (lowName.indexOf(lowSearch) >= 0) {
+          this.verifiedRewards.push(item);
+        }
+      })
+    }
+    else {
+      this.verifiedRewards = this.allVeriRewards;
+    }
+  }
+
+  onSearchCancel(data) {
+    this.newRewards = this.allNewRewards;
+    this.verifiedRewards = this.allVeriRewards;
   }
 
 }
