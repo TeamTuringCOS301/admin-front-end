@@ -1,3 +1,3 @@
 export let CONFIG = {
-    url: "https://erpcoin.duckdns.org:8080"
+    url: "https://192.168.137.38:8080"
 }

@@ -34,6 +34,7 @@ export class ConservationAreaCreatePage {
   drawingManager: any;
   selectedShape: any;
   location: any;
+  polygon: any;
 
   constructor(public renderer: Renderer, public http: Http, public angularHttp: AngularHttp, public view: ViewController, public navParams: NavParams, public geolocation: Geolocation, public zone: NgZone, public loadingCtrl: LoadingController) {
     this.GoogleAutocomplete = new google.maps.places.AutocompleteService();
@@ -49,7 +50,7 @@ export class ConservationAreaCreatePage {
     this.GooglePlaces = new google.maps.places.PlacesService(elem);
     this.loading = this.loadingCtrl.create();
 
-    this.conservationArea = new FormGroup({ areaName: new FormControl() ,province: new FormControl(), city: new FormControl() });
+    this.conservationArea = new FormGroup({ areaName: new FormControl(), province: new FormControl(), city: new FormControl() });
 
     this.undef = false;
     this.drawingManager = null;
@@ -92,8 +93,6 @@ export class ConservationAreaCreatePage {
   }
 
   initMap() {
-
-
     if (this.undef) {
       this.map.setCenter(this.location);
 
@@ -223,14 +222,14 @@ export class ConservationAreaCreatePage {
   }
 
   getBorder() {
+    this.border = [];
     this.clearMarkers();
     let url = "https://nominatim.openstreetmap.org/search/" + this.autocomplete.input.substr(0, this.autocomplete.input.indexOf(',')) + "?format=jsonv2&polygon_geojson=1";
-    console.log(url);
     this.angularHttp.get(url).subscribe(response => {
       var json = JSON.parse((<any>response)._body);
-
+      console.log(json);
       if (json.length > 0) {
-        if (typeof json[0].geojson.coordinates[0].length == "undefined") {
+        if (typeof json[0].geojson.coordinates[0].length == "undefined" || json[0].category == "highway") {
           this.undef = true;
           this.initMap();
         }
@@ -238,15 +237,14 @@ export class ConservationAreaCreatePage {
           let pos = { lat: parseFloat(json[0].lat), lng: parseFloat(json[0].lon) };
           this.map.setCenter(pos);
 
-          console.log("Displaying coords: " + json[0].geojson.coordinates[0].length);
           if (json[0].geojson.coordinates[0].length != 1) {
             var coords = new Array();
             var singleCoord = { lat: 0.0, lng: 0.0 };
             //var singleCoord=new Array();
             var x;
             for (x in json[0].geojson.coordinates[0]) {
-              singleCoord.lat = json[0].geojson.coordinates[0][x][1];
-              singleCoord.lng = json[0].geojson.coordinates[0][x][0];
+              singleCoord.lat = parseFloat(json[0].geojson.coordinates[0][x][1]);
+              singleCoord.lng = parseFloat(json[0].geojson.coordinates[0][x][0]);
               coords.push(singleCoord);
               singleCoord = null;
               singleCoord = { lat: 0.0, lng: 0.0 }
@@ -256,8 +254,8 @@ export class ConservationAreaCreatePage {
             coords = new Array();
             singleCoord = { lat: 0.0, lng: 0.0 };
             for (x in json[0].geojson.coordinates[0][0]) {
-              singleCoord.lat = json[0].geojson.coordinates[0][0][x][1];
-              singleCoord.lng = json[0].geojson.coordinates[0][0][x][0];
+              singleCoord.lat = parseFloat(json[0].geojson.coordinates[0][0][x][1]);
+              singleCoord.lng = parseFloat(json[0].geojson.coordinates[0][0][x][0]);
               coords.push(singleCoord);
               singleCoord = null;
               singleCoord = { lat: 0.0, lng: 0.0 }
@@ -265,7 +263,7 @@ export class ConservationAreaCreatePage {
           }
           this.border = coords;
 
-          var polygon = new google.maps.Polygon({
+          this.polygon = new google.maps.Polygon({
             paths: coords,
             strokeColor: '#0000FF',
             strokeOpacity: 0.8,
@@ -274,7 +272,7 @@ export class ConservationAreaCreatePage {
             fillOpacity: 0.35,
             editable: true
           });
-          polygon.setMap(this.map);
+          this.polygon.setMap(this.map);
 
         }
       } else {
@@ -307,12 +305,21 @@ export class ConservationAreaCreatePage {
       jsonArr.border = final;
     }
     else {
-      jsonArr.border = this.border;
+      var coords = new Array();
+      let singleCoord = { lat: 0.0, lng: 0.0 };
+      for (var x in this.polygon.getPath().b) {
+        singleCoord.lat = parseFloat(this.polygon.getPath().b[x].lat());
+        singleCoord.lng = parseFloat(this.polygon.getPath().b[x].lng());
+        coords.push(singleCoord);
+        singleCoord = null;
+        singleCoord = { lat: 0.0, lng: 0.0 }
+      }
+      jsonArr.border = coords;
     }
     jsonArr.name = value.areaName;
     jsonArr.province = value.province;
     jsonArr.city = value.city;
-
+    console.log(jsonArr.border);
 
     this.http.post("/area/add", jsonArr).subscribe
       (

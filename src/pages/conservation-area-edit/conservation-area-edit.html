@@ -1,0 +1,50 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>Edit Conservation Area</ion-title>
+    <ion-buttons end>
+      <button ion-button icon-only (click)="closeModal()">
+        <ion-icon name="close-circle"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+
+
+<ion-content>
+  <div #map id="map" no-padding>
+
+  </div>
+
+</ion-content>
+
+<ion-footer no-padding>
+    <form (submit)="editConservationArea(requestArea.value)" [formGroup]="requestArea">
+      <ion-grid>
+        <ion-row>
+          <ion-col col-4>
+            <ion-item>
+              <ion-label floating>Name</ion-label>
+              <ion-input formControlName="areaName" type="text" value={{area.name}}></ion-input>
+            </ion-item>
+          </ion-col>
+          <ion-col col-4>
+            <ion-item>
+              <ion-label floating>Province/State</ion-label>
+              <ion-input formControlName="province" type="text" value={{area.province}}></ion-input>
+            </ion-item>
+          </ion-col>
+          <ion-col col-4>
+            <ion-item>
+              <ion-label floating>City</ion-label>
+              <ion-input formControlName="city" type="text" value={{area.city}}></ion-input>
+            </ion-item>
+          </ion-col>
+
+        </ion-row>
+        <ion-row justify-content-center>
+          <button ion-button round outline type="submit">Add<ion-icon name="add"></ion-icon></button>
+        </ion-row>
+      </ion-grid>
+    </form>
+    <!--<button class="geolocation-btn" ion-button round outline (click)="tryGeolocation()"> Try Geolocation </button>-->
+  </ion-footer>
