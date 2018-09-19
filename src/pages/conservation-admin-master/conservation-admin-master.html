@@ -13,9 +13,13 @@
 <ion-content padding>
   <ion-list>
     <ion-item *ngFor="let admin of admins">
-        <h1>{{admin.username}}</h1>
-        <p>{{admin.name}} {{admin.surname}}</p>
-        <p><u>{{admin.email}}</u></p>
+      <h1>{{admin.username}}</h1>
+      <p>{{admin.name}} {{admin.surname}}</p>
+      <p><u>{{admin.email}}</u></p>
+      <button ion-button round outline (click)='showConfirm(admin)'>
+        Delete
+        <ion-icon name="trash"></ion-icon>
+      </button>
     </ion-item>
     <!--<ion-grid>
       <ion-row>

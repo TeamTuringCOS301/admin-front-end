@@ -26,7 +26,7 @@ export class StoreMasterPage {
     this.allNewRewards = [];
     this.allVeriRewards = [];
     this.reward = {};
-    
+
     this.http.get("/reward/list").subscribe
       (
       (data) => //Success
@@ -76,6 +76,48 @@ export class StoreMasterPage {
     console.log('ionViewDidLoad StoreMasterPage');
   }
 
+  updateRewards() {
+    this.http.get("/reward/list").subscribe
+      (
+      (data) => //Success
+      {
+        var jsonResp = JSON.parse(data.text());
+        this.verifiedRewards = jsonResp.rewards;
+        this.verifiedRewards.forEach(element => {
+          element.url = CONFIG.url + "/reward/image/" + element.id;
+        });
+
+        this.allVeriRewards = jsonResp.rewards;
+        this.allVeriRewards.forEach(element => {
+          element.url = CONFIG.url + "/reward/image/" + element.id;
+        });
+      },
+      (error) => {
+        alert(error);
+      }
+      );
+
+    this.http.get("/reward/list/new").subscribe
+      (
+      (data) => //Success
+      {
+        var jsonResp = JSON.parse(data.text());
+        this.newRewards = jsonResp.rewards;
+        this.newRewards.forEach(element => {
+          element.url = CONFIG.url + "/reward/image/" + element.id;
+        });
+
+        this.allNewRewards = jsonResp.rewards;
+        this.allNewRewards.forEach(element => {
+          element.url = CONFIG.url + "/reward/image/" + element.id;
+        });
+      },
+      (error) => {
+        alert(error);
+      }
+      );
+  }
+
   showPrompt(id: any) {
     const prompt = this.alertCtrl.create({
       title: 'Verify',
@@ -83,14 +125,14 @@ export class StoreMasterPage {
       inputs: [
         {
           name: 'value',
-          placeholder: ''
+          placeholder: '',
+          type: 'number'
         },
       ],
       buttons: [
         {
           text: 'Cancel',
           handler: data => {
-            console.log('Cancel clicked');
           }
         },
         {
@@ -107,6 +149,7 @@ export class StoreMasterPage {
   verifyReward(id: any, value: any) {
     var jsonArr = {
       "coinValue": 0,
+      "verify": true
     };
 
     jsonArr.coinValue = parseInt(value);
@@ -115,10 +158,28 @@ export class StoreMasterPage {
       (
       (data) => //Success
       {
-        var jsonResp = JSON.parse(data.text());
+        this.updateRewards();
       },
       (error) => {
-        alert(error);
+        //alert(error);
+      }
+      );
+  }
+
+  unverifyReward(id: any) {
+    var jsonArr = {
+      "coinValue": 1,
+      "verify": false
+    };
+
+    this.http.post("/reward/verify/" + id, jsonArr).subscribe
+      (
+      (data) => //Success
+      {
+        this.updateRewards();
+      },
+      (error) => {
+        //alert(error);
       }
       );
   }
