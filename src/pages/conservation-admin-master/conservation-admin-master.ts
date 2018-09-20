@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, ModalController } from 'ionic-angular';
+import { IonicPage, ModalController, AlertController } from 'ionic-angular';
 import { Http } from '../../http-api';
 
 /**
@@ -16,19 +16,19 @@ import { Http } from '../../http-api';
 })
 export class ConservationAdminMasterPage {
 
-  admin:any;
-  admins:any;
-  constructor(public modCtrl: ModalController, public http: Http) {
+  admin: any;
+  admins: any;
+  constructor(public modCtrl: ModalController, public http: Http, public alertCtrl: AlertController) {
     this.admins = [];
     this.admin = {};
     this.http.get("/admin/list").subscribe
-    (
+      (
       (data) => //Success
       {
         var jsonResp = JSON.parse(data.text());
         this.admins = jsonResp.admins;
       }
-    );
+      );
   }
 
   ionViewDidLoad() {
@@ -37,16 +37,16 @@ export class ConservationAdminMasterPage {
 
   updateConservationAdmin() {
     this.http.get("/admin/list").subscribe
-    (
+      (
       (data) => //Success
       {
         var jsonResp = JSON.parse(data.text());
         this.admins = jsonResp.admins;
       }
-    );
+      );
   }
 
-  openModal(){
+  openModal() {
     const myModal = this.modCtrl.create('ConservationAdminCreatePage');
     myModal.onDidDismiss(() => {
       setTimeout(() => {
@@ -54,6 +54,34 @@ export class ConservationAdminMasterPage {
       }, 1000);
     })
     myModal.present();
+  }
+
+  showConfirm(admin: any) {
+    const confirm = this.alertCtrl.create({
+      title: 'Delete admin?',
+      message: 'Do you agree to delete the admin, ' + admin.name + ' ' + admin.surname + '?',
+      buttons: [
+        {
+          text: 'No',
+          handler: () => {
+            console.log('Disagree clicked');
+          }
+        },
+        {
+          text: 'Yes',
+          handler: () => {
+            this.http.get("/admin/remove/" + admin.id).subscribe
+              (
+              (data) => //Success
+              {
+                this.updateConservationAdmin();
+              }
+              );
+          }
+        }
+      ]
+    });
+    confirm.present();
   }
 
 }
