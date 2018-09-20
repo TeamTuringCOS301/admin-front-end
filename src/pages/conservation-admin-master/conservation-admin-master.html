@@ -16,7 +16,7 @@
       <h1>{{admin.username}}</h1>
       <p>{{admin.name}} {{admin.surname}}</p>
       <p><u>{{admin.email}}</u></p>
-      <button ion-button round outline (click)='showConfirm(admin)'>
+      <button ion-button round item-end (click)='showConfirm(admin)' color="danger">
         Delete
         <ion-icon name="trash"></ion-icon>
       </button>
