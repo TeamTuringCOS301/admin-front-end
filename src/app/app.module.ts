@@ -1,11 +1,9 @@
 import { NgModule, ErrorHandler } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpModule } from '@angular/http';
-import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
+import { IonicApp, IonicModule, IonicErrorHandler, Tabs } from 'ionic-angular';
 import { MyApp } from './app.component';
 
-import { TabsPage } from '../pages/tabs/tabs';
-import { LoginPage } from '../pages/login/login';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 
@@ -15,9 +13,7 @@ import { Http } from '../http-api';
 
 @NgModule({
   declarations: [
-    MyApp,
-    TabsPage,
-    LoginPage,
+    MyApp
   ],
   imports: [
     BrowserModule,
@@ -26,9 +22,7 @@ import { Http } from '../http-api';
   ],
   bootstrap: [IonicApp],
   entryComponents: [
-    MyApp,
-    TabsPage,
-    LoginPage,
+    MyApp
   ],
   providers: [
     StatusBar,

@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
-import { IonicPage, ModalController, AlertController } from 'ionic-angular';
+import { IonicPage, ModalController, AlertController, NavController } from 'ionic-angular';
 import { Http } from '../../http-api';
+import {App} from 'ionic-angular';
 
 /**
  * Generated class for the ConservationAdminMasterPage page.
@@ -18,7 +19,7 @@ export class ConservationAdminMasterPage {
 
   admin: any;
   admins: any;
-  constructor(public modCtrl: ModalController, public http: Http, public alertCtrl: AlertController) {
+  constructor(public modCtrl: ModalController, public http: Http, public alertCtrl: AlertController, public navCtrl: NavController, private app: App) {
     this.admins = [];
     this.admin = {};
     this.http.get("/admin/list").subscribe
@@ -82,6 +83,23 @@ export class ConservationAdminMasterPage {
       ]
     });
     confirm.present();
+  }
+
+  logout() {
+    this.http.get("/superadmin/logout").subscribe
+      (
+      (data) => //Success
+      {
+        /*let elements = document.querySelectorAll(".tabbar");
+
+        if (elements != null) {
+          Object.keys(elements).map((key) => {
+            elements[key].style.display = 'none';
+          });
+        }*/
+        this.app.getRootNav().setRoot("LoginPage");
+      }
+      );
   }
 
 }
