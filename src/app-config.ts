@@ -1,5 +1,5 @@
 export let CONFIG = {
-    url: "https:/erpcoin.westeurope.cloudapp.azure.com/api"
+    url: "/api"
 }
 
 export var EN_TAB_PAGES = {
