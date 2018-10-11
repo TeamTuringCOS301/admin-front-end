@@ -1,17 +1,23 @@
-import { Component } from '@angular/core';
-import { IonicPage } from 'ionic-angular';
+import { Component, ViewChild } from '@angular/core';
+import { IonicPage, NavController, Tabs } from 'ionic-angular';
+import { Globals } from "../../app-config";
 
-@IonicPage()
+@IonicPage({})
 @Component({
   templateUrl: 'tabs.html'
 })
 export class TabsPage {
+  @ViewChild("tabs") tabs: Tabs;
 
   tab1Root = "ConservationAreaMasterPage";
   tab2Root = "ConservationAdminMasterPage";
   tab3Root = "StoreMasterPage";
 
-  constructor() {
+  constructor(public navCtrl: NavController) {
 
+  }
+
+  ionViewDidEnter() {
+    Globals.tabs = this.tabs;
   }
 }

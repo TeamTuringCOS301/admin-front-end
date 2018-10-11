@@ -1,7 +1,7 @@
 import { NgModule, ErrorHandler } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpModule } from '@angular/http';
-import { IonicApp, IonicModule, IonicErrorHandler, Tabs } from 'ionic-angular';
+import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
 import { MyApp } from './app.component';
 
 import { StatusBar } from '@ionic-native/status-bar';
@@ -11,9 +11,11 @@ import { Geolocation } from '@ionic-native/geolocation';
 
 import { Http } from '../http-api';
 
+import { BackbuttonService } from "../services/backbutton.service";
+
 @NgModule({
   declarations: [
-    MyApp
+    MyApp,
   ],
   imports: [
     BrowserModule,
@@ -29,7 +31,8 @@ import { Http } from '../http-api';
     SplashScreen,
     Geolocation,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
-    Http
+    Http,
+    BackbuttonService
   ]
 })
 export class AppModule {}
