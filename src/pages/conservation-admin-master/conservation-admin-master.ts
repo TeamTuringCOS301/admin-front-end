@@ -60,7 +60,7 @@ export class ConservationAdminMasterPage {
         this.updateConservationAdmin()
       }, 1000);
     })
-    history.pushState (null, null, "/#");
+    //history.pushState (null, null, "/superadmin/#");
     myModal.present();
   }
 

@@ -36,7 +36,7 @@ export class ConservationAdminCreatePage {
     );
     this.setupBackButtonBehavior();
   }
-
+ßß
   ionViewDidLoad() {
     console.log('ionViewDidLoad ConservationAdminCreatePage');
   }
@@ -49,11 +49,12 @@ export class ConservationAdminCreatePage {
       window.onpopstate = (evt) => {
         // Navigate back
         window.onpopstate = old;
+        console.log("Modal dismiss");
         this.closeModal();
       }
     };
   }
-
+ß
   closeModal(){
     this.view.dismiss();
   }

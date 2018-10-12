@@ -35,10 +35,15 @@ export class LoginPage {
           this.app.getActiveNav().setRoot("TabsPage");
           //this.navCtrl.push("TabsPage");
         }
+        else
+        {
+          this.presentToast("Error logging in! Please try again!");
+        }
       },
       (error) =>
       {
-        alert("Error: " + error);
+        this.presentToast("Error logging in! Please try again!");
+        //alert("Error: " + error);
       }
     );
 

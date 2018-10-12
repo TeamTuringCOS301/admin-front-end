@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, ModalController, NavParams, ToastController, NavController } from 'ionic-angular';
+import { IonicPage, ModalController, NavParams, ToastController, NavController, App } from 'ionic-angular';
 import { Http } from '../../http-api';
 import { BackbuttonService } from '../../services/backbutton.service';
 import { EN_TAB_PAGES } from "../../app-config";
@@ -21,7 +21,7 @@ export class ConservationAreaMasterPage {
   area: any;
   areas: any;
 
-  constructor(public modCtrl: ModalController, public navParams: NavParams, public http: Http, public toastCtrl : ToastController, private backbuttonService: BackbuttonService, public navCtrl: NavController) {
+  constructor(public modCtrl: ModalController, public navParams: NavParams, public http: Http, public toastCtrl : ToastController, private backbuttonService: BackbuttonService, public navCtrl: NavController, private app: App) {
     this.areas = [];
     this.area = {};
     this.http.get("/area/list").subscribe
@@ -102,6 +102,23 @@ export class ConservationAreaMasterPage {
           }
         });
         addModal.present();
+      }
+      );
+  }
+
+  logout() {
+    this.http.get("/superadmin/logout").subscribe
+      (
+      (data) => //Success
+      {
+        /*let elements = document.querySelectorAll(".tabbar");
+
+        if (elements != null) {
+          Object.keys(elements).map((key) => {
+            elements[key].style.display = 'none';
+          });
+        }*/
+        this.app.getRootNav().setRoot("LoginPage");
       }
       );
   }
