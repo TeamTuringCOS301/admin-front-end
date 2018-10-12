@@ -1,7 +1,9 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, AlertController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, AlertController, App } from 'ionic-angular';
 import { Http } from '../../http-api';
 import { CONFIG } from '../../app-config';
+import { BackbuttonService } from '../../services/backbutton.service';
+import { EN_TAB_PAGES } from "../../app-config";
 
 /**
  * Generated class for the StoreMasterPage page.
@@ -22,7 +24,7 @@ export class StoreMasterPage {
   allNewRewards: any;
   allVeriRewards: any;
   reward: any;
-  constructor(public navCtrl: NavController, public navParams: NavParams, public http: Http, public alertCtrl: AlertController) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public http: Http, public alertCtrl: AlertController, private backbuttonService: BackbuttonService, private app: App) {
     this.allNewRewards = [];
     this.allVeriRewards = [];
     this.reward = {};
@@ -66,6 +68,10 @@ export class StoreMasterPage {
         alert(error);
       }
       );
+  }
+
+  ionViewWillEnter() {
+    this.backbuttonService.pushPage(EN_TAB_PAGES.EN_TP_STORE, this.navCtrl);
   }
 
   navPop() {
@@ -221,4 +227,20 @@ export class StoreMasterPage {
     this.verifiedRewards = this.allVeriRewards;
   }
 
+  logout() {
+    this.http.get("/superadmin/logout").subscribe
+      (
+      (data) => //Success
+      {
+        /*let elements = document.querySelectorAll(".tabbar");
+
+        if (elements != null) {
+          Object.keys(elements).map((key) => {
+            elements[key].style.display = 'none';
+          });
+        }*/
+        this.app.getRootNav().setRoot("LoginPage");
+      }
+      );
+  }
 }

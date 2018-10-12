@@ -4,8 +4,6 @@ import { HttpModule } from '@angular/http';
 import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
 import { MyApp } from './app.component';
 
-import { TabsPage } from '../pages/tabs/tabs';
-import { LoginPage } from '../pages/login/login';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 
@@ -13,11 +11,11 @@ import { Geolocation } from '@ionic-native/geolocation';
 
 import { Http } from '../http-api';
 
+import { BackbuttonService } from "../services/backbutton.service";
+
 @NgModule({
   declarations: [
     MyApp,
-    TabsPage,
-    LoginPage,
   ],
   imports: [
     BrowserModule,
@@ -26,16 +24,15 @@ import { Http } from '../http-api';
   ],
   bootstrap: [IonicApp],
   entryComponents: [
-    MyApp,
-    TabsPage,
-    LoginPage,
+    MyApp
   ],
   providers: [
     StatusBar,
     SplashScreen,
     Geolocation,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
-    Http
+    Http,
+    BackbuttonService
   ]
 })
 export class AppModule {}

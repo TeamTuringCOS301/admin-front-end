@@ -7,9 +7,17 @@
 <ion-header>
   <ion-navbar>
     <ion-title col-8>Store</ion-title>
-  </ion-navbar>
-  <ion-searchbar col-6 col-sm-6 col-md-6 col-lg-4 [(ngModel)]="myInput" [showCancelButton]="shouldShowCancel" (ionInput)="onSearchInput($event)" (ionCancel)="onSearchCancel($event)">
+    <ion-searchbar col-6 col-sm-6 col-md-6 col-lg-4 [(ngModel)]="myInput" [showCancelButton]="shouldShowCancel" (ionInput)="onSearchInput($event)" (ionCancel)="onSearchCancel($event)">
     </ion-searchbar>
+    <ion-buttons end>
+      <button ion-button round outline (click)='logout()'>
+        Log Out
+        <ion-icon name="log-out"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+  
+    
 </ion-header>
 
 

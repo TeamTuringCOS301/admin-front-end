@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
-import { NavController, ToastController } from 'ionic-angular';
+import { IonicPage, NavController, ToastController, App } from 'ionic-angular';
 import { FormGroup, FormControl} from '@angular/forms';
-import { TabsPage } from '../tabs/tabs';
 import { Http } from '../../http-api';
 
+@IonicPage()
 @Component({
   selector: 'page-login',
   templateUrl: 'login.html'
@@ -11,7 +11,7 @@ import { Http } from '../../http-api';
 export class LoginPage {
 
   adminUser: any;
-  constructor(public http: Http,  public navCtrl: NavController, public toastCtrl: ToastController) {
+  constructor(public http: Http,  public navCtrl: NavController, public toastCtrl: ToastController, private app: App) {
     this.adminUser = new FormGroup({user: new FormControl(), pass: new FormControl()});
   }
 
@@ -32,12 +32,18 @@ export class LoginPage {
         if(jsonResp.success)
         {
           this.presentToast("Logged in!")
-          this.navCtrl.push(TabsPage);
+          this.app.getActiveNav().setRoot("TabsPage");
+          //this.navCtrl.push("TabsPage");
+        }
+        else
+        {
+          this.presentToast("Error logging in! Please try again!");
         }
       },
       (error) =>
       {
-        alert("Error: " + error);
+        this.presentToast("Error logging in! Please try again!");
+        //alert("Error: " + error);
       }
     );
 

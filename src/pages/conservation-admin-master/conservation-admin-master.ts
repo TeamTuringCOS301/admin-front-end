@@ -1,6 +1,9 @@
 import { Component } from '@angular/core';
-import { IonicPage, ModalController, AlertController } from 'ionic-angular';
+import { IonicPage, ModalController, AlertController, NavController } from 'ionic-angular';
 import { Http } from '../../http-api';
+import { App } from 'ionic-angular';
+import { BackbuttonService } from '../../services/backbutton.service';
+import { EN_TAB_PAGES } from "../../app-config";
 
 /**
  * Generated class for the ConservationAdminMasterPage page.
@@ -18,7 +21,7 @@ export class ConservationAdminMasterPage {
 
   admin: any;
   admins: any;
-  constructor(public modCtrl: ModalController, public http: Http, public alertCtrl: AlertController) {
+  constructor(public modCtrl: ModalController, public http: Http, public alertCtrl: AlertController, public navCtrl: NavController, private app: App, private backbuttonService: BackbuttonService) {
     this.admins = [];
     this.admin = {};
     this.http.get("/admin/list").subscribe
@@ -33,6 +36,10 @@ export class ConservationAdminMasterPage {
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad ConservationAdminMasterPage');
+  }
+
+  ionViewWillEnter() {
+    this.backbuttonService.pushPage(EN_TAB_PAGES.EN_TP_ADMIN, this.navCtrl);
   }
 
   updateConservationAdmin() {
@@ -53,6 +60,7 @@ export class ConservationAdminMasterPage {
         this.updateConservationAdmin()
       }, 1000);
     })
+    //history.pushState (null, null, "/superadmin/#");
     myModal.present();
   }
 
@@ -82,6 +90,23 @@ export class ConservationAdminMasterPage {
       ]
     });
     confirm.present();
+  }
+
+  logout() {
+    this.http.get("/superadmin/logout").subscribe
+      (
+      (data) => //Success
+      {
+        /*let elements = document.querySelectorAll(".tabbar");
+
+        if (elements != null) {
+          Object.keys(elements).map((key) => {
+            elements[key].style.display = 'none';
+          });
+        }*/
+        this.app.getRootNav().setRoot("LoginPage");
+      }
+      );
   }
 
 }

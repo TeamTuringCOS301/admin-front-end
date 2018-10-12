@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
-import { IonicPage, ModalController, NavParams, ToastController } from 'ionic-angular';
+import { IonicPage, ModalController, NavParams, ToastController, NavController, App } from 'ionic-angular';
 import { Http } from '../../http-api';
+import { BackbuttonService } from '../../services/backbutton.service';
+import { EN_TAB_PAGES } from "../../app-config";
 
 /**
  * Generated class for the ConservationAreaMasterPage page.
@@ -19,7 +21,7 @@ export class ConservationAreaMasterPage {
   area: any;
   areas: any;
 
-  constructor(public modCtrl: ModalController, public navParams: NavParams, public http: Http, public toastCtrl : ToastController) {
+  constructor(public modCtrl: ModalController, public navParams: NavParams, public http: Http, public toastCtrl : ToastController, private backbuttonService: BackbuttonService, public navCtrl: NavController, private app: App) {
     this.areas = [];
     this.area = {};
     this.http.get("/area/list").subscribe
@@ -34,6 +36,10 @@ export class ConservationAreaMasterPage {
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad ConservationAreaMasterPage');
+  }
+
+  ionViewWillEnter() {
+    this.backbuttonService.pushPage(EN_TAB_PAGES.EN_TP_AREA, this.navCtrl);
   }
 
   updateConservationArea() {
@@ -96,6 +102,23 @@ export class ConservationAreaMasterPage {
           }
         });
         addModal.present();
+      }
+      );
+  }
+
+  logout() {
+    this.http.get("/superadmin/logout").subscribe
+      (
+      (data) => //Success
+      {
+        /*let elements = document.querySelectorAll(".tabbar");
+
+        if (elements != null) {
+          Object.keys(elements).map((key) => {
+            elements[key].style.display = 'none';
+          });
+        }*/
+        this.app.getRootNav().setRoot("LoginPage");
       }
       );
   }

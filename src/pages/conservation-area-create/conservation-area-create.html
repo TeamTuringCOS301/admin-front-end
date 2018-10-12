@@ -14,27 +14,30 @@
       </button>
     </ion-buttons>
   </ion-navbar>
-    <ion-grid id="toolbar">
-      <ion-row>
-        <ion-col col-8>
-          <ion-searchbar #pacinput id="pacinput" [(ngModel)]="autocomplete.input" (ionInput)="updateSearchResults()" placeholder="Search for a place"
-            no-padding></ion-searchbar>
-        </ion-col>
-        <ion-col col-2>
-          <!--<button class="getborder-btn" ion-button round outline (click)="getBorder()" color="white" [hidden]="undef == true"> Get Border </button>-->
-          <button class="clear-btn" ion-button round outline (click)="deleteSelectedShape()" color="white" [hidden]="undef == false">Clear </button>
-        </ion-col>
-      </ion-row>
-    </ion-grid>
+  <ion-grid id="toolbar">
+    <ion-row>
+      <ion-col col-8>
+        <ion-searchbar #pacinput id="pacinput" [(ngModel)]="autocomplete.input" (ionInput)="updateSearchResults()" placeholder="Search for a place"
+          no-padding>
+        </ion-searchbar>
+        <ion-list [hidden]="autocompleteItems.length == 0">
+          <ion-item *ngFor="let item of autocompleteItems" tappable (click)="selectSearchResult(item, $event)">
+            {{ item.description }}
+          </ion-item>
+
+        </ion-list>
+      </ion-col>
+      <ion-col col-2>
+        <!--<button class="getborder-btn" ion-button round outline (click)="getBorder()" color="white" [hidden]="undef == true"> Get Border </button>-->
+        <button class="clear-btn" ion-button round outline (click)="deleteSelectedShape()" color="white" [hidden]="undef == false">Clear
+          </button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 </ion-header>
 
 <ion-content>
-  <ion-list [hidden]="autocompleteItems.length == 0">
-    <ion-item *ngFor="let item of autocompleteItems" tappable (click)="selectSearchResult(item, $event)">
-      {{ item.description }}
-    </ion-item>
 
-  </ion-list>
 
   <ion-fab bottom right edge>
     <button ion-fab round outline (click)="getBorder()" color="tertiary" [hidden]="undef == true">Border</button>
@@ -50,12 +53,12 @@
   <form (submit)="addConservationArea(conservationArea.value)" [formGroup]="conservationArea">
     <ion-grid>
       <ion-row>
-          <ion-col col-4>
-              <ion-item>
-                <ion-label floating>Name</ion-label>
-                <ion-input formControlName="areaName" type="text"></ion-input>
-              </ion-item>
-            </ion-col>
+        <ion-col col-4>
+          <ion-item>
+            <ion-label floating>Name</ion-label>
+            <ion-input formControlName="areaName" type="text"></ion-input>
+          </ion-item>
+        </ion-col>
         <ion-col col-4>
           <ion-item>
             <ion-label floating>Province/State</ion-label>
@@ -71,7 +74,7 @@
 
       </ion-row>
       <ion-row justify-content-center>
-          <button ion-button round outline type="submit">Add<ion-icon name="add"></ion-icon></button>
+        <button ion-button round outline type="submit">Add<ion-icon name="add"></ion-icon></button>
       </ion-row>
     </ion-grid>
   </form>
