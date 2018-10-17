@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
-import { IonicPage, ModalController, AlertController, NavController } from 'ionic-angular';
+import { IonicPage, ModalController, AlertController, NavController, ToastController } from 'ionic-angular';
 import { Http } from '../../http-api';
 import { App } from 'ionic-angular';
-import { BackbuttonService } from '../../services/backbutton.service';
-import { EN_TAB_PAGES } from "../../app-config";
+import { Storage } from '@ionic/storage';
+import { handleError, Loading, checkLoggedIn } from '../../app-functions';
 
 /**
  * Generated class for the ConservationAdminMasterPage page.
@@ -21,7 +21,7 @@ export class ConservationAdminMasterPage {
 
   admin: any;
   admins: any;
-  constructor(public modCtrl: ModalController, public http: Http, public alertCtrl: AlertController, public navCtrl: NavController, private app: App, private backbuttonService: BackbuttonService) {
+  constructor(public modCtrl: ModalController, public http: Http, public alertCtrl: AlertController, public navCtrl: NavController, private app: App, public storage: Storage, public toastCtrl:ToastController, public loading:Loading) {
     this.admins = [];
     this.admin = {};
     this.http.get("/admin/list").subscribe
@@ -36,13 +36,15 @@ export class ConservationAdminMasterPage {
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad ConservationAdminMasterPage');
+    checkLoggedIn(this.storage, this.toastCtrl, this.navCtrl);
   }
 
-  ionViewWillEnter() {
-    this.backbuttonService.pushPage(EN_TAB_PAGES.EN_TP_ADMIN, this.navCtrl);
+  ionViewDidEnter() {
+    this.updateConservationAdmin();
   }
 
   updateConservationAdmin() {
+    this.loading.showLoadingScreen();
     this.http.get("/admin/list").subscribe
       (
       (data) => //Success
@@ -51,6 +53,7 @@ export class ConservationAdminMasterPage {
         this.admins = jsonResp.admins;
       }
       );
+      this.loading.doneLoading();
   }
 
   openModal() {
@@ -78,13 +81,20 @@ export class ConservationAdminMasterPage {
         {
           text: 'Yes',
           handler: () => {
+            this.loading.showLoadingScreen();
             this.http.get("/admin/remove/" + admin.id).subscribe
               (
               (data) => //Success
               {
                 this.updateConservationAdmin();
+              },
+              (error) => {
+                if (handleError(this.storage, this.navCtrl, error, this.toastCtrl) == "") {
+                  console.log("No internet connection, retrying...");
+                }
               }
               );
+              this.loading.doneLoading();
           }
         }
       ]
@@ -93,20 +103,23 @@ export class ConservationAdminMasterPage {
   }
 
   logout() {
+    this.loading.showLoadingScreen();
     this.http.get("/superadmin/logout").subscribe
       (
       (data) => //Success
       {
-        /*let elements = document.querySelectorAll(".tabbar");
-
-        if (elements != null) {
-          Object.keys(elements).map((key) => {
-            elements[key].style.display = 'none';
-          });
-        }*/
         this.app.getRootNav().setRoot("LoginPage");
+        this.storage.set('loggedIn', false).then(() => {
+          this.navCtrl.setRoot('LoginPage');
+        });
+      },
+      (error) => {
+        if (handleError(this.storage, this.navCtrl, error, this.toastCtrl) == "") {
+          console.log("No internet connection, retrying...");
+        }
       }
       );
+      this.loading.doneLoading();
   }
 
 }

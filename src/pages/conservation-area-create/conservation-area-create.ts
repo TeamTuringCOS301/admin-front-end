@@ -1,9 +1,11 @@
 import { Component, NgZone, Renderer } from '@angular/core';
-import { IonicPage, LoadingController, NavParams, ViewController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ViewController, ToastController } from 'ionic-angular';
 import { Geolocation } from '@ionic-native/geolocation';
 import { Http as AngularHttp } from '@angular/http';
-import { FormGroup, FormControl } from '@angular/forms';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Http } from '../../http-api';
+import { handleError, Loading, presentToast } from '../../app-functions';
+import { Storage } from '@ionic/storage';
 
 /**
  * Generated class for the ConservationAreaCreatePage page.
@@ -27,7 +29,6 @@ export class ConservationAreaCreatePage {
   geocoder: any;
   markers: any;
   GooglePlaces: any;
-  loading: any;
   conservationArea: any;
   border: any;
   undef: any;
@@ -36,7 +37,7 @@ export class ConservationAreaCreatePage {
   location: any;
   polygon: any;
 
-  constructor(public renderer: Renderer, public http: Http, public angularHttp: AngularHttp, public view: ViewController, public navParams: NavParams, public geolocation: Geolocation, public zone: NgZone, public loadingCtrl: LoadingController) {
+  constructor(public renderer: Renderer, public http: Http, public angularHttp: AngularHttp, public view: ViewController, public navParams: NavParams, public geolocation: Geolocation, public zone: NgZone, public loading: Loading, public storage: Storage, public navCtrl: NavController, public toastCtrl: ToastController) {
     this.GoogleAutocomplete = new google.maps.places.AutocompleteService();
     this.autocomplete = { input: '' };
     this.autocompleteItems = [];
@@ -48,9 +49,8 @@ export class ConservationAreaCreatePage {
     this.geocoder = new google.maps.Geocoder;
     let elem = document.createElement("div")
     this.GooglePlaces = new google.maps.places.PlacesService(elem);
-    this.loading = this.loadingCtrl.create();
 
-    this.conservationArea = new FormGroup({ areaName: new FormControl(), province: new FormControl(), city: new FormControl() });
+    this.conservationArea = new FormGroup({ areaName: new FormControl("", Validators.required), province: new FormControl("", Validators.required), city: new FormControl("", Validators.required) });
 
     this.undef = false;
     this.drawingManager = null;
@@ -77,7 +77,6 @@ export class ConservationAreaCreatePage {
     this.clearSelection();
     this.selectedShape = shape;
     shape.setEditable(true);
-    //selectColor(shape.get('fillColor') || shape.get('strokeColor'));
   }
 
   deleteSelectedShape() {
@@ -97,8 +96,11 @@ export class ConservationAreaCreatePage {
       this.map.setCenter(this.location);
 
       var polyOptions = {
-        strokeWeight: 1.5,
-        fillOpacity: 0.2,
+        strokeColor: '#6c7bfe',
+        strokeOpacity: 0.8,
+        strokeWeight: 2,
+        fillColor: '#6c7bfe',
+        fillOpacity: 0.35,
         editable: true
       };
 
@@ -222,8 +224,11 @@ export class ConservationAreaCreatePage {
   }
 
   getBorder() {
-    this.border = [];
+    this.loading.showLoadingScreen();
+    this.border = null;
+    this.border = new Array();
     this.clearMarkers();
+    this.initMap();
     let url = "https://nominatim.openstreetmap.org/search/" + this.autocomplete.input.substr(0, this.autocomplete.input.indexOf(',')) + "?format=jsonv2&polygon_geojson=1";
     this.angularHttp.get(url).subscribe(response => {
       var json = JSON.parse((<any>response)._body);
@@ -265,24 +270,26 @@ export class ConservationAreaCreatePage {
 
           this.polygon = new google.maps.Polygon({
             paths: coords,
-            strokeColor: '#0000FF',
+            strokeColor: '#6c7bfe',
             strokeOpacity: 0.8,
             strokeWeight: 2,
-            fillColor: '#0000FF',
+            fillColor: '#6c7bfe',
             fillOpacity: 0.35,
             editable: true
           });
           this.polygon.setMap(this.map);
-
+          presentToast(this.toastCtrl, "Border retrieved")
         }
       } else {
         this.undef = true;
         this.initMap();
       }
     });
+    this.loading.doneLoading();
   }
 
   addConservationArea(value: any) {
+    this.loading.showLoadingScreen();
     var jsonArr = {
       "border": [],
       "name": "",
@@ -324,14 +331,15 @@ export class ConservationAreaCreatePage {
     this.http.post("/area/add", jsonArr).subscribe
       (
       data => {
-        //alert("Success: " + data.text());
-
+        presentToast(this.toastCtrl, "Conservation area added");
       },
-      error => {
-        //alert("Error: " + error);
+      (error) => {
+        if (handleError(this.storage, this.navCtrl, error, this.toastCtrl) == "") {
+          console.log("No internet connection, retrying...");
+        }
       }
       );
-
+    this.loading.doneLoading();
     this.view.dismiss();
   }
 

@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, AlertController, App } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, AlertController, App, ToastController } from 'ionic-angular';
 import { Http } from '../../http-api';
 import { CONFIG } from '../../app-config';
-import { BackbuttonService } from '../../services/backbutton.service';
-import { EN_TAB_PAGES } from "../../app-config";
+import { Storage } from '@ionic/storage';
+import { handleError, Loading, presentToast } from '../../app-functions';
 
 /**
  * Generated class for the StoreMasterPage page.
@@ -24,7 +24,7 @@ export class StoreMasterPage {
   allNewRewards: any;
   allVeriRewards: any;
   reward: any;
-  constructor(public navCtrl: NavController, public navParams: NavParams, public http: Http, public alertCtrl: AlertController, private backbuttonService: BackbuttonService, private app: App) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public http: Http, public alertCtrl: AlertController, private app: App, public storage: Storage, public toastCtrl: ToastController, public loading: Loading) {
     this.allNewRewards = [];
     this.allVeriRewards = [];
     this.reward = {};
@@ -45,7 +45,9 @@ export class StoreMasterPage {
         });
       },
       (error) => {
-        alert(error);
+        if (handleError(this.storage, this.navCtrl, error, this.toastCtrl) == "") {
+          console.log("No internet connection, retrying...");
+        }
       }
       );
 
@@ -65,13 +67,11 @@ export class StoreMasterPage {
         });
       },
       (error) => {
-        alert(error);
+        if (handleError(this.storage, this.navCtrl, error, this.toastCtrl) == "") {
+          console.log("No internet connection, retrying...");
+        }
       }
       );
-  }
-
-  ionViewWillEnter() {
-    this.backbuttonService.pushPage(EN_TAB_PAGES.EN_TP_STORE, this.navCtrl);
   }
 
   navPop() {
@@ -82,7 +82,12 @@ export class StoreMasterPage {
     console.log('ionViewDidLoad StoreMasterPage');
   }
 
+  ionViewDidEnter() {
+    this.updateRewards();
+  }
+
   updateRewards() {
+    this.loading.showLoadingScreen();
     this.http.get("/reward/list").subscribe
       (
       (data) => //Success
@@ -99,7 +104,9 @@ export class StoreMasterPage {
         });
       },
       (error) => {
-        alert(error);
+        if (handleError(this.storage, this.navCtrl, error, this.toastCtrl) == "") {
+          console.log("No internet connection, retrying...");
+        }
       }
       );
 
@@ -119,9 +126,12 @@ export class StoreMasterPage {
         });
       },
       (error) => {
-        alert(error);
+        if (handleError(this.storage, this.navCtrl, error, this.toastCtrl) == "") {
+          console.log("No internet connection, retrying...");
+        }
       }
       );
+      this.loading.doneLoading(); 
   }
 
   showPrompt(id: any) {
@@ -160,16 +170,21 @@ export class StoreMasterPage {
 
     jsonArr.coinValue = parseInt(value);
 
+    this.loading.showLoadingScreen();
     this.http.post("/reward/verify/" + id, jsonArr).subscribe
       (
       (data) => //Success
       {
         this.updateRewards();
+        presentToast(this.toastCtrl, "Reward verified");
       },
       (error) => {
-        //alert(error);
+        if (handleError(this.storage, this.navCtrl, error, this.toastCtrl) == "") {
+          console.log("No internet connection, retrying...");
+        }
       }
       );
+      this.loading.doneLoading();
   }
 
   unverifyReward(id: any) {
@@ -177,7 +192,7 @@ export class StoreMasterPage {
       "coinValue": 1,
       "verify": false
     };
-
+    this.loading.showLoadingScreen();
     this.http.post("/reward/verify/" + id, jsonArr).subscribe
       (
       (data) => //Success
@@ -188,16 +203,18 @@ export class StoreMasterPage {
         //alert(error);
       }
       );
+      this.loading.doneLoading();
   }
 
   onSearchInput(data) {
     this.newRewards = [];
-    var searched = data.target.value;
-    if (searched && searched.trim() != '') {
+    var searched1 = data.target.value;
+    if (searched1 && searched1.trim() != '') {
       this.reward = this.allNewRewards.filter((item) => {
-        var lowName = item.areaName.toLowerCase();
-        var lowSearch = searched.toLowerCase();
-        if (lowName.indexOf(lowSearch) >= 0) {
+        var lowAreaName = item.areaName.toLowerCase();
+        var lowName = item.name.toLowerCase();
+        var lowSearch = searched1.toLowerCase();
+        if (lowName.indexOf(lowSearch) >= 0 || lowAreaName.indexOf(lowSearch) >= 0) {
           this.newRewards.push(item);
         }
       })
@@ -207,12 +224,13 @@ export class StoreMasterPage {
     }
 
     this.verifiedRewards = [];
-    var searched = data.target.value;
-    if (searched && searched.trim() != '') {
+    var searched2 = data.target.value;
+    if (searched2 && searched2.trim() != '') {
       this.reward = this.allVeriRewards.filter((item) => {
-        var lowName = item.areaName.toLowerCase();
-        var lowSearch = searched.toLowerCase();
-        if (lowName.indexOf(lowSearch) >= 0) {
+        var lowAreaName = item.areaName.toLowerCase();
+        var lowName = item.name.toLowerCase();
+        var lowSearch = searched2.toLowerCase();
+        if (lowName.indexOf(lowSearch) >= 0 || lowAreaName.indexOf(lowSearch) >= 0) {
           this.verifiedRewards.push(item);
         }
       })
@@ -228,19 +246,17 @@ export class StoreMasterPage {
   }
 
   logout() {
+    this.loading.showLoadingScreen();
     this.http.get("/superadmin/logout").subscribe
       (
       (data) => //Success
       {
-        /*let elements = document.querySelectorAll(".tabbar");
-
-        if (elements != null) {
-          Object.keys(elements).map((key) => {
-            elements[key].style.display = 'none';
-          });
-        }*/
         this.app.getRootNav().setRoot("LoginPage");
+        this.storage.set('loggedIn', false).then(() => {
+          this.navCtrl.setRoot('LoginPage');
+        });
       }
       );
+      this.loading.doneLoading();
   }
 }

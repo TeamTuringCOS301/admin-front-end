@@ -1,3 +1,33 @@
+import { LoadingController } from 'ionic-angular';
+import { Injectable } from '@angular/core';
+
+@Injectable()
+export class Loading {
+  loading:any = null;
+  constructor(private loadingCtrl: LoadingController){}
+
+  public showLoadingScreen()
+  {
+    if(this.loading == null)
+    {
+      this.loading = this.loadingCtrl.create({
+        content: 'Loading',
+        spinner: 'circles'
+      });
+      this.loading.present();
+    }
+  }
+
+  public doneLoading()
+  {
+    if(this.loading != null)
+    {
+      this.loading.dismiss();
+      this.loading = null;
+    }
+  }
+};
+
 export function checkLoggedIn(storage, toastCtrl, navCtrl)
 {
   storage.get('loggedIn').then(
@@ -51,23 +81,12 @@ export function addCloseListener(viewCtrl, curWin, events)
   });
 }
 
-export function openModal(modalPage, curWin)
-{
-  modalPage.present();
-  curWin.location.href = curWin.location.href +"/#";
-}
-
-export function closeModal(viewCtrl, events)
-{
-  events.publish("Reload Balance");
-  viewCtrl.dismiss();
-}
-
-export function handleError(navCtrl, error, toastCtrl)
+export function handleError(storage, navCtrl, error, toastCtrl)
 {
   var msg = "";
   if(error.status == 401)
   {
+    storage.set('loggedIn', false);
     navCtrl.setRoot('login');
     msg = "Please log in";
   }
@@ -75,16 +94,17 @@ export function handleError(navCtrl, error, toastCtrl)
   {
     msg = "Internal Server Error. Please try again later.";
   }
-  else if(error.status == 400)
+  /*else if(error.status == 400)
   {
     msg = "Something went wrong. Please try again.";
-  }
+  }*/
   else
   {
-    msg = "No Internet Connection.";
+    //msg = "No Internet Connection.";
   }
   if(msg != "")
   {
     presentLongToast(toastCtrl, msg);
   }
+  return msg;
 }

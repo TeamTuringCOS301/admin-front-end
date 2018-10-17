@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, ViewController } from 'ionic-angular';
-import { FormGroup, FormControl } from '@angular/forms';
+import { IonicPage, NavController, NavParams, ViewController, ToastController } from 'ionic-angular';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { Loading} from '../../app-functions';
+import { Storage } from '@ionic/storage';
 
 /**
  * Generated class for the ConservationAreaEditPage page.
@@ -23,11 +25,11 @@ export class ConservationAreaEditPage {
   map: any;
   polygon: any;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public view: ViewController) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public view: ViewController, public toastCtrl:ToastController, public storage:Storage, public loading:Loading) {
     this.requestArea = new FormGroup({
-      areaName: new FormControl(),
-      province: new FormControl(),
-      city: new FormControl()
+      areaName: new FormControl("", Validators.required),
+      province: new FormControl("", Validators.required),
+      city: new FormControl("", Validators.required)
     });
 
     this.area = this.navParams.get('area');
@@ -68,6 +70,7 @@ export class ConservationAreaEditPage {
   }
 
   editConservationArea(value: any) {
+    this.loading.showLoadingScreen();
     var coords = new Array();
     let singleCoord = { lat: 0.0, lng: 0.0 };
     for (var x in this.polygon.getPath().b) {
@@ -89,7 +92,7 @@ export class ConservationAreaEditPage {
     jsonArr.name = value.areaName;
     jsonArr.province = value.province;
     jsonArr.city = value.city;
-
+    this.loading.doneLoading();
     this.view.dismiss(jsonArr); 
   }
 

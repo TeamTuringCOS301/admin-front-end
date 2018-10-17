@@ -1,7 +1,9 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, ToastController, App } from 'ionic-angular';
-import { FormGroup, FormControl} from '@angular/forms';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Http } from '../../http-api';
+import { Storage } from '@ionic/storage';
+import { handleError, Loading } from '../../app-functions';
 
 @IonicPage()
 @Component({
@@ -11,45 +13,53 @@ import { Http } from '../../http-api';
 export class LoginPage {
 
   adminUser: any;
-  constructor(public http: Http,  public navCtrl: NavController, public toastCtrl: ToastController, private app: App) {
-    this.adminUser = new FormGroup({user: new FormControl(), pass: new FormControl()});
+  constructor(public http: Http, public navCtrl: NavController, public toastCtrl: ToastController, private app: App, public storage: Storage, public loading: Loading) {
+    this.adminUser = new FormGroup({ user: new FormControl("", Validators.required), pass: new FormControl("", Validators.required) });
   }
 
-  public loginAdmin(value: any)
-  {
+  ionViewWillLoad() {
+    this.storage.get('loggedIn').then
+      (
+      (val) => {
+        if (val == true) {
+          this.navCtrl.setRoot('TabsPage');
+        }
+      }
+      );
+    this.loading.doneLoading();
+  }
+
+  public loginAdmin(value: any) {
     var jsonArr = {
-      "username":"",
-      "password":""
+      "username": "",
+      "password": ""
     };
     jsonArr.username = value.user;
     jsonArr.password = value.pass;
 
+    this.loading.showLoadingScreen();
     this.http.post("/superadmin/login", jsonArr).subscribe
-    (
-      (data) =>
-      {
+      (
+      (data) => {
         var jsonResp = JSON.parse(data.text());
-        if(jsonResp.success)
-        {
+        if (jsonResp.success) {
           this.presentToast("Logged in!")
-          this.app.getActiveNav().setRoot("TabsPage");
-          //this.navCtrl.push("TabsPage");
+          this.storage.set('loggedIn', true).then(() => {
+            this.app.getActiveNav().setRoot("TabsPage");
+          });
         }
-        else
-        {
+        else {
           this.presentToast("Error logging in! Please try again!");
         }
       },
-      (error) =>
-      {
-        this.presentToast("Error logging in! Please try again!");
-        //alert("Error: " + error);
+      (error) => {
+        handleError(this.storage, this.navCtrl, error, this.toastCtrl);
       }
-    );
-
+      );
+      this.loading.doneLoading();
   }
 
-  presentToast(text){
+  presentToast(text) {
     let toast = this.toastCtrl.create(
       {
         message: text,
@@ -60,5 +70,4 @@ export class LoginPage {
     );
     toast.present();
   }
-
 }

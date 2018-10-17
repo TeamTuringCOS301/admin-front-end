@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { IonicPage, ModalController, NavParams, ToastController, NavController, App } from 'ionic-angular';
 import { Http } from '../../http-api';
-import { BackbuttonService } from '../../services/backbutton.service';
-import { EN_TAB_PAGES } from "../../app-config";
+import { Storage } from '@ionic/storage';
+import { checkLoggedIn, handleError, Loading } from '../../app-functions';
 
 /**
  * Generated class for the ConservationAreaMasterPage page.
@@ -21,7 +21,7 @@ export class ConservationAreaMasterPage {
   area: any;
   areas: any;
 
-  constructor(public modCtrl: ModalController, public navParams: NavParams, public http: Http, public toastCtrl : ToastController, private backbuttonService: BackbuttonService, public navCtrl: NavController, private app: App) {
+  constructor(public modCtrl: ModalController, public navParams: NavParams, public http: Http, public toastCtrl: ToastController, public navCtrl: NavController, private app: App, public storage: Storage, public loading: Loading) {
     this.areas = [];
     this.area = {};
     this.http.get("/area/list").subscribe
@@ -36,21 +36,29 @@ export class ConservationAreaMasterPage {
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad ConservationAreaMasterPage');
+    checkLoggedIn(this.storage, this.toastCtrl, this.navCtrl);
   }
 
-  ionViewWillEnter() {
-    this.backbuttonService.pushPage(EN_TAB_PAGES.EN_TP_AREA, this.navCtrl);
+  ionViewDidEnter() {
+    this.updateConservationArea();
   }
 
   updateConservationArea() {
+    this.loading.showLoadingScreen();
     this.http.get("/area/list").subscribe
       (
       (data) => //Success
       {
         var jsonResp = JSON.parse(data.text());
         this.areas = jsonResp.areas;
+      },
+      (error) => {
+        if (handleError(this.storage, this.navCtrl, error, this.toastCtrl) == "") {
+          console.log("No internet connection, retrying...");
+        }
       }
       );
+    this.loading.doneLoading();
   }
 
   openModal() {
@@ -63,20 +71,20 @@ export class ConservationAreaMasterPage {
     myModal.present();
   }
 
-  presentToast(text)
-    {
-        let toast = this.toastCtrl.create(
-        {
-            message: text,
-            duration: 1500,
-            position: 'bottom',
-            dismissOnPageChange: false
-        }
-        );
-        toast.present();
-    }
+  presentToast(text) {
+    let toast = this.toastCtrl.create(
+      {
+        message: text,
+        duration: 1500,
+        position: 'bottom',
+        dismissOnPageChange: false
+      }
+    );
+    toast.present();
+  }
 
   public editArea(area) {
+    this.loading.showLoadingScreen();
     this.http.get("/area/info/" + area.id).subscribe
       (
       (data) => //Success
@@ -86,41 +94,50 @@ export class ConservationAreaMasterPage {
         addModal.onDidDismiss(result => {
           if (result) {
             this.http.post("/area/update/" + area.id, result).subscribe
-            (
-                (data) =>
-                {
-                    this.presentToast("Area Edited");
-                    setTimeout(() => {
-                      this.updateConservationArea()
-                    }, 1000);
-                },
-                (error) =>
-                {
-                    //this.presentToast("Error: " + error);
+              (
+              (data) => {
+                this.presentToast("Area Edited");
+                setTimeout(() => {
+                  this.updateConservationArea()
+                }, 1000);
+              },
+              (error) => {
+                if (handleError(this.storage, this.navCtrl, error, this.toastCtrl) == "") {
+                  console.log("No internet connection, retrying...");
                 }
-            );
+              }
+              );
           }
         });
         addModal.present();
+      },
+      (error) => {
+        if (handleError(this.storage, this.navCtrl, error, this.toastCtrl) == "") {
+          console.log("No internet connection, retrying...");
+        }
       }
       );
+    this.loading.doneLoading();
   }
 
   logout() {
+    this.loading.showLoadingScreen();
     this.http.get("/superadmin/logout").subscribe
       (
       (data) => //Success
       {
-        /*let elements = document.querySelectorAll(".tabbar");
-
-        if (elements != null) {
-          Object.keys(elements).map((key) => {
-            elements[key].style.display = 'none';
-          });
-        }*/
         this.app.getRootNav().setRoot("LoginPage");
+        this.storage.set('loggedIn', false).then(() => {
+          this.navCtrl.setRoot('LoginPage');
+        });
+      },
+      (error) => {
+        if (handleError(this.storage, this.navCtrl, error, this.toastCtrl) == "") {
+          console.log("No internet connection, retrying...");
+        }
       }
       );
+    this.loading.doneLoading();
   }
 }
 

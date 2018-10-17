@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavParams, ViewController, NavController } from 'ionic-angular';
-import { FormGroup, FormControl } from '@angular/forms';
+import { IonicPage, NavParams, ViewController, NavController, ToastController } from 'ionic-angular';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Http } from '../../http-api';
-import { BackbuttonService } from '../../services/backbutton.service';
-import { EN_TAB_PAGES } from "../../app-config";
+import { Storage } from '@ionic/storage';
+import { handleError, Loading, presentToast } from '../../app-functions';
 
 /**
  * Generated class for the ConservationAdminCreatePage page.
@@ -22,8 +22,8 @@ export class ConservationAdminCreatePage {
   area: any;
   areas: any;
   conservationAdmin: any;
-  constructor(public navParams: NavParams, public http: Http, public view: ViewController, private backbuttonService: BackbuttonService, public navCtrl: NavController) {
-    this.conservationAdmin = new FormGroup({username: new FormControl(), email: new FormControl(), fname: new FormControl(), sname: new FormControl(), carea: new FormControl()});
+  constructor(public navParams: NavParams, public http: Http, public view: ViewController, public navCtrl: NavController, public toastCtrl: ToastController, public storage: Storage, public loading: Loading) {
+    this.conservationAdmin = new FormGroup({username: new FormControl("", Validators.required), email: new FormControl("", Validators.required), fname: new FormControl("", Validators.required), sname: new FormControl("", Validators.required), carea: new FormControl("", Validators.required)});
     this.areas = [];
     this.area = {};
     this.http.get("/area/list").subscribe
@@ -34,27 +34,11 @@ export class ConservationAdminCreatePage {
         this.areas = jsonResp.areas;
       }
     );
-    this.setupBackButtonBehavior();
   }
-ßß
+
   ionViewDidLoad() {
     console.log('ionViewDidLoad ConservationAdminCreatePage');
   }
-
-  setupBackButtonBehavior() {
-    if (window.location.protocol !== "file:") {
-
-      // Register browser back button action(s)
-      var old = window.onpopstate;
-      window.onpopstate = (evt) => {
-        // Navigate back
-        window.onpopstate = old;
-        console.log("Modal dismiss");
-        this.closeModal();
-      }
-    };
-  }
-ß
   closeModal(){
     this.view.dismiss();
   }
@@ -73,18 +57,19 @@ export class ConservationAdminCreatePage {
     jsonArr.name = value.fname;
     jsonArr.surname = value.sname;
     jsonArr.area = parseInt(value.carea);
-
+    this.loading.showLoadingScreen();
     this.http.post("/admin/add", jsonArr).subscribe
     (
-      function(data)
-      {
-        //alert("Success: " + data.text());
+      (data) => {
+        presentToast(this.toastCtrl, "Conservation admin added");
       },
-      function(error)
-      {
-        //alert("Error: " + error);
+      (error) => {
+        if (handleError(this.storage, this.navCtrl, error, this.toastCtrl) == "") {
+          console.log("No internet connection, retrying...");
+        }
       }
     );
+    this.loading.doneLoading();
 
     this.closeModal();
   }

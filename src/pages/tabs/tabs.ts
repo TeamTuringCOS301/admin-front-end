@@ -1,14 +1,11 @@
-import { Component, ViewChild } from '@angular/core';
-import { IonicPage, NavController, Tabs } from 'ionic-angular';
-import { Globals } from "../../app-config";
+import { Component } from '@angular/core';
+import { IonicPage, NavController} from 'ionic-angular';
 
 @IonicPage({})
 @Component({
   templateUrl: 'tabs.html'
 })
 export class TabsPage {
-  @ViewChild("tabs") tabs: Tabs;
-
   tab1Root = "ConservationAreaMasterPage";
   tab2Root = "ConservationAdminMasterPage";
   tab3Root = "StoreMasterPage";
@@ -18,6 +15,6 @@ export class TabsPage {
   }
 
   ionViewDidEnter() {
-    Globals.tabs = this.tabs;
+
   }
 }
